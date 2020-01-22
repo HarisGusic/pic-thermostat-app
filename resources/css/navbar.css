@@ -1,0 +1,25 @@
+.toggle-button {
+    -fx-background-radius: 0;
+    -fx-background-color: #00000000;
+
+    -fx-text-fill: #656B77;
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+}
+
+.toggle-button:hover {
+    -fx-background-color: #FFFFFF10;
+    -fx-text-fill: #9CA4B2;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #00000040;
+    -fx-text-fill: #9CA4B2;
+}
+
+#nav-box {
+    -fx-background-color: #21242D;
+    -fx-border-color: #171A23;
+    -fx-border-width: 0 0.08em 0 0;
+    -fx-padding: 0.5em 0.1em 0.5em 0;
+}

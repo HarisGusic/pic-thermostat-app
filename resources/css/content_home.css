@@ -1,0 +1,15 @@
+.label {
+    -fx-text-fill: #9CA4B2;
+}
+
+.text-field {
+    -fx-background-color: #343B45;
+    -fx-border-color: #171A23;
+    -fx-border-radius: 0.3em;
+    -fx-background-radius: 0.3em;
+
+    -fx-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+    -fx-text-fill: #9CA4B2;
+    -fx-alignment: center;
+}
