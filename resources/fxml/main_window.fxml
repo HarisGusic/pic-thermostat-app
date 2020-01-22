@@ -4,8 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
             xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="pic.thermostat.Controller">
     <left>
         <VBox id="nav-box" fx:id="navbar" maxWidth="${mainLayout.width}" prefHeight="${mainLayout.height}"
@@ -36,55 +35,55 @@
 
     <!-- This is just a test, and should be moved to another file when more screens are added -->
     <center>
-        <!-- GridPane probably isn't the most adequate container -->
-        <GridPane fx:id="contentHome" alignment="TOP_CENTER"
-                  style="-fx-background-color: #282C35; -fx-padding: 4em 4em 4em 4em;">
+        <!-- -->
+        <VBox fx:id="contentHome" alignment="TOP_CENTER" fillWidth="false" spacing="10"
+              style="-fx-background-color: #282C35; -fx-padding: 4em 4em 4em 4em;">
+
             <stylesheets>
                 <URL value="@/css/content_home.css"/>
             </stylesheets>
-            <rowConstraints>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-            </rowConstraints>
-            <columnConstraints>
-                <ColumnConstraints fillWidth="false" percentWidth="20"/>
-                <ColumnConstraints fillWidth="false" percentWidth="30"/>
-                <ColumnConstraints fillWidth="false" percentWidth="20"/>
-            </columnConstraints>
 
             <!-- Current time -->
-            <Label fx:id="labelTime"
-                   style="-fx-font-size: 16; -fx-padding: 0.1em 0.1em 0.1em 0.1em; -fx-text-fill: #4DB6AC;"
-                   text="Sat, 00:00:00" GridPane.columnSpan="3" GridPane.halignment="CENTER"/>
 
-            <!-- Temperature -->
-            <Label text="Temperature" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
+            <VBox>
+                <Label fx:id="labelTime" styleClass="display-time" text="Sat, 00:00:00"/>
+                <Separator prefWidth="${labelTime.width}"/>
+            </VBox>
 
-            <TextField fx:id="fldHomeTemp" editable="false" prefColumnCount="${fldHomeTemp.length}" text="28 °C"
-                       GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6"/>
+            <!-- Temperature group -->
+            <GridPane hgap="10" vgap="5">
+                <rowConstraints>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                </rowConstraints>
+                <columnConstraints>
+                    <ColumnConstraints fillWidth="false"/>
+                    <ColumnConstraints fillWidth="false"/>
+                    <ColumnConstraints fillWidth="false"/>
+                </columnConstraints>
+                <!-- Temperature -->
+                <Label text="Temperature" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0"/>
 
-            <!-- Min temperature -->
-            <Label text="Min" GridPane.halignment="CENTER" GridPane.rowIndex="10"/>
+                <TextField fx:id="fldHomeTemp" editable="false" prefColumnCount="${fldHomeTemp.length}" text="28 °C"
+                           GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
 
-            <TextField fx:id="fldHomeMin" editable="false" prefColumnCount="${fldHomeMin.length}" text="27 °C"
-                       GridPane.halignment="CENTER" GridPane.rowIndex="9"/>
+                <!--<ProgressBar prefWidth="${fldHomeTemp.width}" prefHeight="5" progress="0.5"
+                             GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER"/>-->
 
-            <!-- Max temperature -->
-            <Label text="Max" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10"/>
+                <!-- Min temperature -->
+                <Label text="Min" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
 
-            <TextField fx:id="fldHomeMax" editable="false" prefColumnCount="${fldHomeMax.length}" text="29 °C"
-                       GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9"/>
+                <TextField fx:id="fldHomeMin" editable="false" prefColumnCount="${fldHomeMin.length}" text="27 °C"
+                           GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
 
-        </GridPane>
+                <!-- Max temperature -->
+                <Label text="Max" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+
+                <TextField fx:id="fldHomeMax" editable="false" prefColumnCount="${fldHomeMax.length}" text="29 °C"
+                           GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+
+            </GridPane>
+        </VBox>
     </center>
 </BorderPane>

@@ -4,7 +4,7 @@
 
     -fx-text-fill: #656B77;
     -fx-font-weight: bold;
-    -fx-font-size: 12;
+    -fx-font-size: 14;
 }
 
 .toggle-button:hover {
@@ -20,6 +20,6 @@
 #nav-box {
     -fx-background-color: #21242D;
     -fx-border-color: #171A23;
-    -fx-border-width: 0 0.08em 0 0;
-    -fx-padding: 0.5em 0.1em 0.5em 0;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: 5 1 5 0;
 }
