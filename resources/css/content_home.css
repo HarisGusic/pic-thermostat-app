@@ -25,6 +25,10 @@
     -fx-border-width: 0.5;
 }
 
+#separator-home .line {
+    -fx-border-color: #171A23;
+}
+
 .progress-bar .bar {
     -fx-background-color: #7986CB;
     -fx-background-insets: 0 0 0 0;

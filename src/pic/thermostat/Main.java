@@ -18,6 +18,8 @@ public class Main extends Application {
         Parent root = loader.load();
         primaryStage.setTitle("PIC Thermostat");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setMaxWidth(800);
+        primaryStage.setMaxHeight(500);
         primaryStage.show();
     }
 }
