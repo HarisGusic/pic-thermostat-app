@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
@@ -13,19 +16,19 @@
                 <URL value="@/css/navbar.css"/>
             </stylesheets>
             <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" selected="true" text="Home"
-                          textAlignment="CENTER">
+                          textAlignment="CENTER" fx:id="btnHome">
                 <toggleGroup>
                     <ToggleGroup fx:id="navbarToggle"/>
                 </toggleGroup>
             </ToggleButton>
             <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" text="Read Programs"
-                          textAlignment="CENTER">
+                          textAlignment="CENTER" fx:id="btnReadPrograms">
                 <toggleGroup>
                     <fx:reference source="navbarToggle"/>
                 </toggleGroup>
             </ToggleButton>
             <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" text="Edit Programs"
-                          textAlignment="CENTER">
+                          textAlignment="CENTER" fx:id="btnEditPrograms">
                 <toggleGroup>
                     <fx:reference source="navbarToggle"/>
                 </toggleGroup>
@@ -33,74 +36,11 @@
         </VBox>
     </left>
 
-    <!-- This is just a test, and should be moved to another file when more screens are added -->
     <center>
-        <VBox fx:id="contentHome" alignment="TOP_CENTER" fillWidth="false" spacing="10"
-              style="-fx-background-color: #282C35; -fx-padding: 4em 4em 4em 4em;">
-
-            <stylesheets>
-                <URL value="@/css/content_home.css"/>
-            </stylesheets>
-
-            <!-- Current time -->
-
-            <VBox>
-                <Label fx:id="labelTime" styleClass="display-time" text="Sat, 00:00:00"/>
-                <Separator prefWidth="${labelTime.width}"/>
-            </VBox>
-
-            <!-- Temperature group -->
-            <GridPane fx:id="temperatureGroup" hgap="10" vgap="5">
-                <rowConstraints>
-                    <RowConstraints/>
-                    <RowConstraints/>
-                    <RowConstraints/>
-                </rowConstraints>
-                <columnConstraints>
-                    <ColumnConstraints fillWidth="false"/>
-                    <ColumnConstraints fillWidth="false"/>
-                    <ColumnConstraints fillWidth="false"/>
-                </columnConstraints>
-                <!-- Temperature -->
-                <Label text="Temperature" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0"/>
-
-                <TextField fx:id="fldHomeTemp" editable="false" prefColumnCount="${fldHomeTemp.length}" text="28 °C"
-                           GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-
-                <ProgressBar prefHeight="5" prefWidth="${fldHomeTemp.width}" progress="0.5" GridPane.columnIndex="1"
-                             GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-
-                <!-- Min temperature -->
-                <Label text="Min" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-
-                <TextField fx:id="fldHomeMin" editable="false" prefColumnCount="${fldHomeMin.length}" text="27 °C"
-                           GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-
-                <!-- Max temperature -->
-                <Label text="Max" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-
-                <TextField fx:id="fldHomeMax" editable="false" prefColumnCount="${fldHomeMax.length}" text="29 °C"
-                           GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-
-            </GridPane>
-
-            <Separator id="separator-home" prefWidth="${temperatureGroup.width}"/>
-
-            <!-- Current program on/off times -->
-
-            <VBox alignment="CENTER" fillWidth="false" spacing="5">
-                <Label text="Current Program"/>
-
-                <HBox spacing="5" alignment="CENTER">
-                    <TextField fx:id="fldTimeOn" editable="false" maxWidth="90" prefColumnCount="${fldTimeOn.length}"
-                               text="Sat, 00:00"/>
-
-                    <!--<Slider prefWidth="50" disable="true" value="0.6" min="0" max="1"/>-->
-
-                    <TextField fx:id="fldTimeOff" editable="false" maxWidth="90" prefColumnCount="${fldTimeOn.length}"
-                               text="Sat, 00:10"/>
-                </HBox>
-            </VBox>
-        </VBox>
+        <StackPane>
+            <fx:include source="content_home.fxml" fx:id="contentHome"/>
+            <fx:include source="content_read_programs.fxml" fx:id="contentReadPrograms" visible="false"/>
+            <fx:include source="content_edit_programs.fxml" fx:id="contentEditPrograms" visible="false"/>
+        </StackPane>
     </center>
 </BorderPane>

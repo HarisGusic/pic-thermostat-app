@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="contentHome" alignment="TOP_CENTER"
+      spacing="10"
+      style="-fx-background-color: #282C35; -fx-padding: 4em 4em 4em 4em;"
+      fx:controller="pic.thermostat.HomeController"
+      fillWidth="false"
+      xmlns="http://javafx.com/javafx">
+
+    <stylesheets>
+        <URL value="@/css/content_home.css"/>
+    </stylesheets>
+
+    <!-- Current time -->
+    <VBox>
+        <Label fx:id="labelTime" styleClass="display-time" text="Sat, 00:00:00"/>
+        <Separator prefWidth="${labelTime.width}"/>
+    </VBox>
+
+    <!-- Temperature group -->
+    <GridPane fx:id="temperatureGroup" hgap="10" vgap="5">
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+        </rowConstraints>
+        <columnConstraints>
+            <ColumnConstraints fillWidth="false"/>
+            <ColumnConstraints fillWidth="false"/>
+            <ColumnConstraints fillWidth="false"/>
+        </columnConstraints>
+        <!-- Temperature -->
+        <Label text="Temperature" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0"/>
+
+        <TextField fx:id="fldHomeTemp" editable="false" prefColumnCount="${fldHomeTemp.length}" text="28 °C"
+                   GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+
+        <ProgressBar prefHeight="5" prefWidth="${fldHomeTemp.width}" progress="0.5" GridPane.columnIndex="1"
+                     GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+
+        <!-- Min temperature -->
+        <Label text="Min" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+
+        <TextField fx:id="fldHomeMin" editable="false" prefColumnCount="${fldHomeMin.length}" text="27 °C"
+                   GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+
+        <!-- Max temperature -->
+        <Label text="Max" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+
+        <TextField fx:id="fldHomeMax" editable="false" prefColumnCount="${fldHomeMax.length}" text="29 °C"
+                   GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+
+    </GridPane>
+
+    <Separator id="separator-home" prefWidth="${temperatureGroup.width}"/>
+
+    <!-- Current program on/off times -->
+    <VBox alignment="CENTER" fillWidth="false" spacing="5">
+        <Label text="Current Program"/>
+
+        <HBox spacing="5" alignment="CENTER">
+            <TextField fx:id="fldTimeOn" editable="false" maxWidth="90" prefColumnCount="${fldTimeOn.length}"
+                       text="Sat, 00:00"/>
+
+            <!--<Slider prefWidth="50" disable="true" value="0.6" min="0" max="1"/>-->
+
+            <TextField fx:id="fldTimeOff" editable="false" maxWidth="90" prefColumnCount="${fldTimeOn.length}"
+                       text="Sat, 00:10"/>
+        </HBox>
+    </VBox>
+
+</VBox>
