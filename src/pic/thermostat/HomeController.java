@@ -7,7 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import pic.thermostat.data.Data;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -33,7 +35,7 @@ public class HomeController extends ContentController {
         // Periodically update the home screen GUI
         timeUpdater = new PauseTransition(Duration.seconds(0.1));
         timeUpdater.setOnFinished(e -> {
-            updateTime();
+            update();
             timeUpdater.playFromStart();
         });
         timeUpdater.play();
@@ -42,7 +44,7 @@ public class HomeController extends ContentController {
     /*
      * Refresh the system clock
      */
-    private void updateTime() {
+    private void update() {
         LocalDateTime dateTime = LocalDateTime.now();
         String hms = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         labelTime.setText(
@@ -50,6 +52,7 @@ public class HomeController extends ContentController {
                         + ", "
                         + hms
         );
+        fldHomeTemp.setText(String.valueOf(Float.valueOf(new DecimalFormat("#.0").format(Data.getTemperature()))));
     }
 
     public void setActive(boolean active) {

@@ -7,9 +7,7 @@ import gnu.io.SerialPort;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Communication {
 
@@ -60,6 +58,18 @@ public class Communication {
         in = usedPort.getInputStream();
         out = usedPort.getOutputStream();
         out.write((byte) CONNECTION_REQUEST);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    SerialReader.readTemperature();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 0, 1000);
     }
 
 }
