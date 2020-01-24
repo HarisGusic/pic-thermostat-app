@@ -21,6 +21,9 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setMaxWidth(800);
         primaryStage.setMaxHeight(500);
+        primaryStage.setOnCloseRequest(e -> {
+            Communication.release();
+        });
         primaryStage.show();
 
         Communication.initialize();

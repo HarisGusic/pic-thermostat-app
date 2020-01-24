@@ -3,6 +3,7 @@ package pic.thermostat.data;
 public class Data {
 
     private volatile static short temperature;
+    private volatile static short deviceTime;
     private volatile static byte startDay, endDay;
     private volatile static short on, off;
     private volatile static short min, max;
@@ -22,6 +23,10 @@ public class Data {
 
     public static void setTemperature(float temp) {
         //TODO temperature = temp;
+    }
+
+    public static void setDeviceTime(short time) {
+        deviceTime = time;
     }
 
 }
