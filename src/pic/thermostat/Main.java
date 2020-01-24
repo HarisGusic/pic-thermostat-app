@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pic.thermostat.comms.Communication;
 
 public class Main extends Application {
 
@@ -21,5 +22,7 @@ public class Main extends Application {
         primaryStage.setMaxWidth(800);
         primaryStage.setMaxHeight(500);
         primaryStage.show();
+
+        Communication.initialize();
     }
 }
