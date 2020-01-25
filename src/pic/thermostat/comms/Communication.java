@@ -16,8 +16,9 @@ public class Communication {
             PROGRAMS_TX_REQUEST = '>';
 
     public static volatile char status;
-    private static Timer timer;
     static SerialPort activePort;
+    private static Timer timer;
+    private static volatile boolean timerPaused = false;
 
     /**
      * Find the serial port with a microcontroller connected to it.
@@ -57,7 +58,7 @@ public class Communication {
             return;
         activePort = ports.get(0);
         activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-        activePort.openPort();
+        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 0, 0);
 
         // Establish connection
         activePort.writeBytes(new byte[]{CONNECTION_REQUEST}, 1);
@@ -67,6 +68,8 @@ public class Communication {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (timerPaused)
+                    return;
                 try {
                     SerialReader.readTemperature();
                 } catch (Exception e) {
@@ -83,4 +86,16 @@ public class Communication {
             timer.cancel();
     }
 
+    /**
+     * Called when a transmit/receive operation has finished.
+     */
+    static void onFinishTask(char task) {
+        timerPaused = true;
+        while (activePort.bytesAvailable() > 0) {
+            byte[] b = new byte[1];
+            activePort.readBytes(b, 1);
+            System.out.println("Ate: " + b[0]);
+        }
+        timerPaused = false;
+    }
 }

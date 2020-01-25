@@ -10,8 +10,6 @@ import static pic.thermostat.comms.Communication.activePort;
 
 public class SerialReader {
 
-    static int prviput = 0;
-
     public static void readTemperature() throws Exception {
         if (Communication.status != 0)
             return;
@@ -33,6 +31,7 @@ public class SerialReader {
                     e.printStackTrace();
                 }
                 Communication.status = 0;
+                Communication.onFinishTask(Communication.TEMP_TX_REQUEST);
             }
         });
         activePort.writeBytes(new byte[]{Communication.TEMP_TX_REQUEST}, 1);
