@@ -58,10 +58,12 @@ public class Communication {
             return;
         activePort = ports.get(0);
         activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 0, 0);
+        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 100, 0);
+        activePort.openPort();
 
         // Establish connection
         activePort.writeBytes(new byte[]{CONNECTION_REQUEST}, 1);
+        SerialReader.initialize();
 
         // Initiate periodic data acquisition
         timer = new Timer();
@@ -76,7 +78,7 @@ public class Communication {
                     e.printStackTrace();
                 }
             }
-        }, 0, 1000);
+        }, 0, 5000);
     }
 
     public static void release() {
@@ -86,16 +88,4 @@ public class Communication {
             timer.cancel();
     }
 
-    /**
-     * Called when a transmit/receive operation has finished.
-     */
-    static void onFinishTask(char task) {
-        timerPaused = true;
-        while (activePort.bytesAvailable() > 0) {
-            byte[] b = new byte[1];
-            activePort.readBytes(b, 1);
-            System.out.println("Ate: " + b[0]);
-        }
-        timerPaused = false;
-    }
 }

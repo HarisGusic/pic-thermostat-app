@@ -10,10 +10,7 @@ import static pic.thermostat.comms.Communication.activePort;
 
 public class SerialReader {
 
-    public static void readTemperature() throws Exception {
-        if (Communication.status != 0)
-            return;
-        Communication.status = Communication.TEMP_TX_REQUEST;
+    public static void initialize() {
         activePort.addDataListener(new SerialPortDataListener() {
             @Override
             public int getListeningEvents() {
@@ -22,19 +19,36 @@ public class SerialReader {
 
             @Override
             public void serialEvent(SerialPortEvent serialPortEvent) {
-                byte[] data = new byte[2];
-                activePort.readBytes(data, 2);
-                System.out.println(String.format("%x %x", data[0], data[1]));
-                try {
-                    Data.setTemperatureRaw(Data.deserializeTemperature(data));
-                } catch (AbsentInformationException e) {
-                    e.printStackTrace();
+                if (Communication.status == Communication.TEMP_TX_REQUEST) {
+                    onTemperatureDataAvailable();
                 }
-                Communication.status = 0;
-                Communication.onFinishTask(Communication.TEMP_TX_REQUEST);
+                //Remove excess buffer content
+                while (activePort.bytesAvailable() > 0) {
+                    byte[] b = new byte[1];
+                    activePort.readBytes(b, 1);
+                    System.out.println("Ate: " + b[0]);
+                }
             }
         });
+    }
+
+    public static void readTemperature() throws Exception {
+        if (Communication.status != 0)
+            return;
+        Communication.status = Communication.TEMP_TX_REQUEST;
         activePort.writeBytes(new byte[]{Communication.TEMP_TX_REQUEST}, 1);
+    }
+
+    private static void onTemperatureDataAvailable() {
+        byte[] data = new byte[2];
+        activePort.readBytes(data, 2);
+        System.out.println(String.format("%x %x", data[0], data[1]));
+        try {
+            Data.setTemperatureRaw(Data.deserializeTemperature(data));
+        } catch (AbsentInformationException e) {
+            e.printStackTrace();
+        }
+        Communication.status = 0;
     }
 
     public static void readProgram() throws Exception {
