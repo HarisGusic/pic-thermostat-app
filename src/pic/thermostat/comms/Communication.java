@@ -1,7 +1,8 @@
 package pic.thermostat.comms;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import com.fazecast.jSerialComm.SerialPort;
+
+import java.util.*;
 
 public class Communication {
 
@@ -16,23 +17,52 @@ public class Communication {
 
     public static volatile char status;
     private static Timer timer;
+    static SerialPort activePort;
+
+    /**
+     * Find the serial port with a microcontroller connected to it.
+     *
+     * @return The SerialPort object associated with the port that has been found.
+     */
+    public static SerialPort detectDevice() {
+        //TODO implement
+        SerialPort[] comPorts = SerialPort.getCommPorts();
+        for (var port : comPorts) {
+            if (port.openPort()) {
+
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return All serial ports that are not used by other programs.
+     */
+    public static List<SerialPort> getUnusedSerialPorts() {
+        List<SerialPort> found = new ArrayList<>();
+        SerialPort[] comPorts = SerialPort.getCommPorts();
+        for (var port : comPorts) {
+            if (port.openPort()) {
+                found.add(port);
+                port.closePort();
+            }
+        }
+        return found;
+    }
 
     public static void initialize() throws Exception {
-        /*var ports = getAvailableSerialPorts();
-        for (var portId : ports) {
-            System.out.println(portId.getName());
-            if (isPortAvailable(portId))
-                usedPort = portId.open("PIC Thermostat", 2000);
-        }
-        if (usedPort == null) {
-            System.exit(0);
+        System.out.println(Arrays.toString(SerialPort.getCommPorts()));
+        List<SerialPort> ports = getUnusedSerialPorts();
+        if (ports.isEmpty())
             return;
-        }
-        usedPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-        in = usedPort.getInputStream();
-        out = usedPort.getOutputStream();
-        out.write((byte) CONNECTION_REQUEST);*/
+        activePort = ports.get(0);
+        activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+        activePort.openPort();
 
+        // Establish connection
+        activePort.writeBytes(new byte[]{CONNECTION_REQUEST}, 1);
+
+        // Initiate periodic data acquisition
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -47,7 +77,8 @@ public class Communication {
     }
 
     public static void release() {
-        //TODO
+        if (activePort != null)
+            activePort.closePort();
         if (timer != null)
             timer.cancel();
     }
