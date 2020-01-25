@@ -19,7 +19,7 @@ public class SerialReader {
 
             @Override
             public void serialEvent(SerialPortEvent serialPortEvent) {
-                if (Communication.status == Communication.TEMP_TX_REQUEST) {
+                if (Communication.status == Communication.REQUEST_RX_TEMP) {
                     onTemperatureDataAvailable();
                 }
                 //Remove excess buffer content
@@ -35,8 +35,8 @@ public class SerialReader {
     public static void readTemperature() throws Exception {
         if (Communication.status != 0)
             return;
-        Communication.status = Communication.TEMP_TX_REQUEST;
-        activePort.writeBytes(new byte[]{Communication.TEMP_TX_REQUEST}, 1);
+        Communication.status = Communication.REQUEST_RX_TEMP;
+        activePort.writeBytes(new byte[]{Communication.REQUEST_RX_TEMP}, 1);
     }
 
     private static void onTemperatureDataAvailable() {

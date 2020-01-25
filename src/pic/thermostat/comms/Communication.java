@@ -7,13 +7,16 @@ import java.util.*;
 public class Communication {
 
     public static final char
-            CONNECTION_REQUEST = '#',
-            TEMP_TX_REQUEST = '$',
-            TIME_TX_REQUEST = 'T',
-            TIME_RX_REQUEST = 't',
-            PROGRAM_TX_REQUEST = '&',
-            PROGRAMS_RX_REQUEST = '<',
-            PROGRAMS_TX_REQUEST = '>';
+            REQUEST_CONNECTION = '#',
+
+    REQUEST_RX_TEMP = '$',
+            REQUEST_RX_TIME = 'T',
+            REQUEST_RX_CURRENT_PROGRAM = '&',
+            REQUEST_RX_PROGRAMS = '>',
+
+    REQUEST_TX_TIME = 't',
+            REQUEST_TX_PROGRAM = 'p',
+            REQUEST_TX_PROGRAMS = '<';
 
     public static volatile char status;
     static SerialPort activePort;
@@ -62,7 +65,7 @@ public class Communication {
         activePort.openPort();
 
         // Establish connection
-        activePort.writeBytes(new byte[]{CONNECTION_REQUEST}, 1);
+        activePort.writeBytes(new byte[]{REQUEST_CONNECTION}, 1);
         SerialReader.initialize();
 
         // Initiate periodic data acquisition
