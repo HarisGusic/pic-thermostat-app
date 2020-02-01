@@ -1,36 +1,43 @@
+@import 'colors.css';
+
+#home {
+    -fx-background-color: -content;
+    -fx-padding: 4em 4em 4em 4em;
+}
+
 .label {
-    -fx-text-fill: #9CA4B2;
+    -fx-text-fill: -text;
     -fx-font-size: 14;
 }
 
 .text-field {
-    -fx-background-color: #343B45;
-    -fx-border-color: #171A23;
+    -fx-background-color: -field;
+    -fx-border-color: -border;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
 
     -fx-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
-    -fx-text-fill: #9CA4B2;
+    -fx-text-fill: -text;
     -fx-alignment: center;
 }
 
 .display-time {
     -fx-font-size: 20;
-    -fx-text-fill: #7986CB;
+    -fx-text-fill: -accent;
 }
 
 .separator .line {
-    -fx-border-color: #7986CB;
+    -fx-border-color: -accent;
     -fx-border-width: 0.5;
 }
 
 #separator-home .line {
-    -fx-border-color: #171A23;
+    -fx-border-color: -border;
 }
 
 .progress-bar .bar {
-    -fx-background-color: #7986CB;
+    -fx-background-color: -accent;
     -fx-background-insets: 0 0 0 0;
     -fx-padding: 0 5 0 5;
 }

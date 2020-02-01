@@ -1,3 +1,5 @@
+@import 'colors.css';
+
 .toggle-button {
     -fx-background-radius: 0;
     -fx-background-color: #00000000;
@@ -9,17 +11,17 @@
 
 .toggle-button:hover {
     -fx-background-color: #FFFFFF10;
-    -fx-text-fill: #9CA4B2;
+    -fx-text-fill: -text;
 }
 
 .toggle-button:selected {
     -fx-background-color: #00000040;
-    -fx-text-fill: #9CA4B2;
+    -fx-text-fill: -text;
 }
 
 #nav-box {
-    -fx-background-color: #21242D;
-    -fx-border-color: #171A23;
+    -fx-background-color: -menu;
+    -fx-border-color: -border;
     -fx-border-width: 0 1 0 0;
     -fx-padding: 5 1 5 0;
 }

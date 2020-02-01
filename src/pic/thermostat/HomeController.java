@@ -25,6 +25,7 @@ public class HomeController extends ContentController {
     public TextField fldHomeMax;
     public TextField fldTimeOn;
     public TextField fldTimeOff;
+    public Label labelDeviceTime;
     private PauseTransition timeUpdater;
 
     public HomeController() {

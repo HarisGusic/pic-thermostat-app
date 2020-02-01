@@ -4,8 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:id="contentHome" alignment="TOP_CENTER"
-      spacing="10"
-      style="-fx-background-color: #282C35; -fx-padding: 4em 4em 4em 4em;"
+      spacing="10" id="home"
       fx:controller="pic.thermostat.HomeController"
       fillWidth="false"
       xmlns="http://javafx.com/javafx">
@@ -15,9 +14,10 @@
     </stylesheets>
 
     <!-- Current time -->
-    <VBox>
+    <VBox alignment="CENTER">
         <Label fx:id="labelTime" styleClass="display-time" text="Sat, 00:00:00"/>
         <Separator prefWidth="${labelTime.width}"/>
+        <Label fx:id="labelDeviceTime" styleClass="display-time" text="Sat, 00:00" style="-fx-font-size: 16;"/>
     </VBox>
 
     <!-- Temperature group -->
