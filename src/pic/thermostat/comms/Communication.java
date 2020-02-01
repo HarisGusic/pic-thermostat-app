@@ -1,6 +1,7 @@
 package pic.thermostat.comms;
 
 import com.fazecast.jSerialComm.SerialPort;
+import pic.thermostat.HomeModel;
 
 import java.util.*;
 
@@ -16,7 +17,10 @@ public class Communication {
             REQUEST_TX_PROGRAM = 'p',
             REQUEST_TX_PROGRAMS = '<';
 
+    public static final int TIMEOUT = 100;
+
     public static volatile char status;
+    public static volatile boolean connected = false;
     static SerialPort activePort;
     private static Timer timer;
     private static volatile boolean timerPaused = false;
@@ -59,27 +63,40 @@ public class Communication {
             return;
         activePort = ports.get(0);
         activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 100, 0);
+        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, 0);
         activePort.openPort();
 
-        // Establish connection
-        activePort.writeBytes(new byte[]{REQUEST_CONNECTION}, 1);
-        SerialReader.initialize();
+        establishConnection();
 
         // Initiate periodic data acquisition
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (timerPaused)
-                    return;
-                try {
-                    SerialReader.readTemperature();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                update();
             }
-        }, 0, 5000);
+        }, 0, 1000);
+    }
+
+    private static void update() {
+        if (timerPaused)
+            return;
+        if (!connected)
+            establishConnection();
+        else
+            try {
+                SerialReader.readTemperature();
+                //SerialReader.readTime();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+    public static void establishConnection() {
+        activePort.writeBytes(new byte[]{REQUEST_CONNECTION}, 1);
+        // TODO implement check
+        connected = true;
+        Communication.status = 0;
     }
 
     public static void release() {
@@ -87,6 +104,11 @@ public class Communication {
             activePort.closePort();
         if (timer != null)
             timer.cancel();
+    }
+
+    public static void registerTimeout() {
+        connected = false;
+        HomeModel.notifyCommTimeout();
     }
 
 }

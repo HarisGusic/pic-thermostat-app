@@ -42,7 +42,7 @@ public class Time implements Serializable {
      * with the data from {@code rawData}.
      */
     public void deserialize(byte[] rawData) throws AbsentInformationException {
-        if (rawData.length < 10)
+        if (rawData.length < 3)
             throw new AbsentInformationException("Byte data is incomplete");
         day = rawData[0];
         timeOfDay = (short) (rawData[1] + ((short) rawData[2] << 8));

@@ -1,15 +1,19 @@
 package pic.thermostat;
 
 import com.sun.jdi.AbsentInformationException;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Alert;
 import pic.thermostat.data.Program;
 import pic.thermostat.data.Time;
 
 import java.text.DecimalFormat;
 
 public class HomeModel {
+
+    static HomeController controller;
 
     private static SimpleIntegerProperty temperature = new SimpleIntegerProperty(1024);
     private static SimpleStringProperty displayTemperature = new SimpleStringProperty(getTextualTemperature());
@@ -91,5 +95,11 @@ public class HomeModel {
 
     public static SimpleObjectProperty<Program> currentProgramProperty() {
         return currentProgram;
+    }
+
+    public static void notifyCommTimeout() {
+        Platform.runLater(() -> {
+            new Alert(Alert.AlertType.ERROR, "Serial connection lost.").showAndWait();
+        });
     }
 }
