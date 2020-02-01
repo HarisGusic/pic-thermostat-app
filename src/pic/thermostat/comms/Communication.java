@@ -22,8 +22,10 @@ public class Communication {
     public static volatile char status;
     public static volatile boolean connected = false;
     static SerialPort activePort;
+    volatile static LinkedList<Character> readQueue = new LinkedList<>();
     private static Timer timer;
     private static volatile boolean timerPaused = false;
+    private static int prescaler = 0;
 
     /**
      * Find the serial port with a microcontroller connected to it.
@@ -79,17 +81,18 @@ public class Communication {
     }
 
     private static void update() {
+        ++prescaler;
         if (timerPaused)
             return;
         if (!connected)
             establishConnection();
-        else
-            try {
-                SerialReader.readTemperature();
-                //SerialReader.readTime();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        else {
+            SerialReader.readTemperature();
+            processWriteQueue();
+            processReadQueue();
+            if ((prescaler %= 10) == 9)
+                SerialReader.readTime();
+        }
     }
 
     public static void establishConnection() {
@@ -109,6 +112,25 @@ public class Communication {
     public static void registerTimeout() {
         connected = false;
         HomeModel.notifyCommTimeout();
+    }
+
+    public static void onOperationFinished() {
+        Communication.status = 0;
+        processWriteQueue();
+        processReadQueue();
+    }
+
+    private static void processWriteQueue() {
+        //TODO implement
+    }
+
+    private static void processReadQueue() {
+        if (Communication.status != 0)
+            return;
+        Communication.status = readQueue.getFirst();
+        readQueue.remove();
+        SerialReader.initialize();
+        activePort.writeBytes(new byte[]{(byte) Communication.status}, 1);
     }
 
 }

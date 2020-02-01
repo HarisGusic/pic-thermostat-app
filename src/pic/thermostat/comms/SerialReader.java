@@ -9,6 +9,7 @@ import pic.thermostat.HomeModel;
 import pic.thermostat.data.Time;
 
 import static pic.thermostat.comms.Communication.activePort;
+import static pic.thermostat.comms.Communication.readQueue;
 
 public class SerialReader {
 
@@ -35,12 +36,9 @@ public class SerialReader {
         });
     }
 
-    public static void readTemperature() throws Exception {
-        if (Communication.status != 0)
-            return;
-        Communication.status = Communication.REQUEST_RX_TEMP;
-        SerialReader.initialize();
-        activePort.writeBytes(new byte[]{Communication.REQUEST_RX_TEMP}, 1);
+    public static void readTemperature() {
+        if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_TEMP)))
+            readQueue.add(Communication.REQUEST_RX_TEMP);
     }
 
     private static void onTemperatureDataAvailable() {
@@ -58,17 +56,9 @@ public class SerialReader {
         Communication.status = 0;
     }
 
-    public static void readProgram() throws Exception {
-        if (Communication.status != 0)
-            return;
-    }
-
-    public static void readTime() throws Exception {
-        if (Communication.status != 0)
-            return;
-        Communication.status = Communication.REQUEST_RX_TIME;
-        SerialReader.initialize();
-        activePort.writeBytes(new byte[]{Communication.REQUEST_RX_TIME}, 1);
+    public static void readTime() {
+        if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_TIME)))
+            readQueue.add(Communication.REQUEST_RX_TIME);
     }
 
     private static void onTimeDataAvailable() {
@@ -85,7 +75,7 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
-        Communication.status = 0;
+        Communication.onOperationFinished();
     }
 
     /**
