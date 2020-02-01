@@ -7,9 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import pic.thermostat.data.Data;
 
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -33,10 +31,24 @@ public class HomeController extends ContentController {
 
     @FXML
     public void initialize() {
+        // Add listeners to properties
+        HomeModel.deviceTimeProperty().addListener((obs, oldVal, newVal) -> {
+            // Whenever the time changes, change the textual representation as well
+            HomeModel.setDisplayDeviceTime(newVal.toString());
+        });
+        HomeModel.temperatureProperty().addListener((obs, oldVal, newVal) -> {
+            // Whenever the temperature changes, change the textual representation as well
+            HomeModel.setDisplayTemperature(HomeModel.getTextualTemperature());
+        });
+
+        // Bind controls to their respective model properties
+        labelDeviceTime.textProperty().bind(HomeModel.displayDeviceTimeProperty());
+        fldHomeTemp.textProperty().bind(HomeModel.displayTemperatureProperty());
+
         // Periodically update the home screen GUI
         timeUpdater = new PauseTransition(Duration.seconds(0.1));
         timeUpdater.setOnFinished(e -> {
-            update();
+            updateClock();
             timeUpdater.playFromStart();
         });
         timeUpdater.play();
@@ -45,7 +57,7 @@ public class HomeController extends ContentController {
     /*
      * Refresh the system clock
      */
-    private void update() {
+    private void updateClock() {
         LocalDateTime dateTime = LocalDateTime.now();
         String hms = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         labelTime.setText(
@@ -53,7 +65,6 @@ public class HomeController extends ContentController {
                         + ", "
                         + hms
         );
-        fldHomeTemp.setText(String.valueOf(Float.valueOf(new DecimalFormat("#.0").format(Data.getTemperature()))));
     }
 
     public void setActive(boolean active) {

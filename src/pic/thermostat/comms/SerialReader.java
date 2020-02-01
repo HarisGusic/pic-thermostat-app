@@ -4,7 +4,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.sun.jdi.AbsentInformationException;
-import pic.thermostat.data.Data;
+import pic.thermostat.HomeModel;
 
 import static pic.thermostat.comms.Communication.activePort;
 
@@ -44,7 +44,7 @@ public class SerialReader {
         activePort.readBytes(data, 2);
         System.out.println(String.format("%x %x", data[0], data[1]));
         try {
-            Data.setTemperatureRaw(Data.deserializeTemperature(data));
+            HomeModel.setTemperature(HomeModel.deserializeTemperature(data));
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }

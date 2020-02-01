@@ -13,9 +13,12 @@ import java.time.format.DateTimeFormatter;
  */
 public class Time implements Serializable {
 
-    private byte day;
+    private byte day = 0;
     // In this version: the number of minutes that have passed today
-    private short timeOfDay;
+    private short timeOfDay = 0;
+
+    public Time() {
+    }
 
     public Time(byte day, short timeOfDay) {
         this.day = day;
@@ -55,5 +58,32 @@ public class Time implements Serializable {
         // NOTE: Should always reflect the format of struct Time on the microcontroller.
         return new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}[day] + ", "
                 + LocalTime.of(timeOfDay / 60, timeOfDay % 60).format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Time t = ((Time) o);
+        return day == t.day && timeOfDay == t.timeOfDay;
+    }
+
+    @Override
+    public int hashCode() {
+        return day + timeOfDay * 256;
+    }
+
+    public byte getDay() {
+        return day;
+    }
+
+    public void setDay(byte day) {
+        this.day = day;
+    }
+
+    public short getTimeOfDay() {
+        return timeOfDay;
+    }
+
+    public void setTimeOfDay(short timeOfDay) {
+        this.timeOfDay = timeOfDay;
     }
 }
