@@ -8,13 +8,11 @@ public class Communication {
 
     public static final char
             REQUEST_CONNECTION = '#',
-
-    REQUEST_RX_TEMP = '$',
+            REQUEST_RX_TEMP = '$',
             REQUEST_RX_TIME = 'T',
             REQUEST_RX_CURRENT_PROGRAM = '&',
             REQUEST_RX_PROGRAMS = '>',
-
-    REQUEST_TX_TIME = 't',
+            REQUEST_TX_TIME = 't',
             REQUEST_TX_PROGRAM = 'p',
             REQUEST_TX_PROGRAMS = '<';
 

@@ -4,6 +4,11 @@ import com.sun.jdi.AbsentInformationException;
 
 import java.io.Serializable;
 
+/**
+ * Holds program data in the same format as the struct Program
+ * on the microcontroller. This class implements serialization
+ * and deserialization.
+ */
 public class Program implements Serializable {
 
     public byte startDay, endDay;
@@ -27,6 +32,10 @@ public class Program implements Serializable {
         max = prog.max;
     }
 
+    /**
+     * Convert this object into byte data suitable
+     * for serial transmission.
+     */
     public byte[] serialize() {
         return new byte[]{
                 startDay,
@@ -42,6 +51,10 @@ public class Program implements Serializable {
         };
     }
 
+    /**
+     * Assign the attributes of this object
+     * with the data from {@code rawData}.
+     */
     public void deserialize(byte[] rawData) throws AbsentInformationException {
         if (rawData.length < 10)
             throw new AbsentInformationException("Byte data is incomplete");

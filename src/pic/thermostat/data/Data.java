@@ -5,11 +5,17 @@ import com.sun.jdi.AbsentInformationException;
 public class Data {
 
     private volatile static short temperature;
-    private volatile static short deviceTime;
-    private volatile static byte startDay, endDay;
-    private volatile static short on, off;
-    private volatile static short min, max;
+    private volatile static Program currentProgram;
+    private volatile static Time deviceTime;
     private volatile static Program[] programs;
+
+    public static Time getDeviceTime() {
+        return deviceTime;
+    }
+
+    public static void setDeviceTime(Time time) {
+        deviceTime = time;
+    }
 
     public static short getTemperatureRaw() {
         return temperature;
@@ -27,10 +33,6 @@ public class Data {
         //TODO temperature = temp;
     }
 
-    public static void setDeviceTime(short time) {
-        deviceTime = time;
-    }
-
     public static byte[] serializeTemperature() {
         return new byte[]{(byte) temperature, (byte) (temperature >> 8)};
     }
@@ -40,5 +42,6 @@ public class Data {
             throw new AbsentInformationException("Temperature data is incomplete");
         return (short) (data[0] + ((short) data[1] << 8));
     }
+
 
 }
