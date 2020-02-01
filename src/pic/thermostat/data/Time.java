@@ -3,6 +3,8 @@ package pic.thermostat.data;
 import com.sun.jdi.AbsentInformationException;
 
 import java.io.Serializable;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Holds time data in the same format as the struct Time
@@ -11,8 +13,14 @@ import java.io.Serializable;
  */
 public class Time implements Serializable {
 
-    byte day;
-    short timeOfDay;
+    private byte day;
+    // In this version: the number of minutes that have passed today
+    private short timeOfDay;
+
+    public Time(byte day, short timeOfDay) {
+        this.day = day;
+        this.timeOfDay = timeOfDay;
+    }
 
     /**
      * Convert this object into byte data suitable
@@ -35,5 +43,17 @@ public class Time implements Serializable {
             throw new AbsentInformationException("Byte data is incomplete");
         day = rawData[0];
         timeOfDay = (short) (rawData[1] + ((short) rawData[2] << 8));
+    }
+
+    /**
+     * @return The time in the format "Day, HH:mm".
+     * <br>
+     * Example: "Wed, 04:05"
+     */
+    @Override
+    public String toString() {
+        // NOTE: Should always reflect the format of struct Time on the microcontroller.
+        return new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}[day] + ", "
+                + LocalTime.of(timeOfDay / 60, timeOfDay % 60).format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 }
