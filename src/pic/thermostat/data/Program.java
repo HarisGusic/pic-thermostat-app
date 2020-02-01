@@ -15,6 +15,8 @@ public class Program implements Serializable {
     public short on, off;
     public short min, max;
 
+    public static final int DATA_SIZE = 10;
+
     public Program() {
 
     }

@@ -17,6 +17,8 @@ public class Time implements Serializable {
     // In this version: the number of minutes that have passed today
     private short timeOfDay = 0;
 
+    public static final int DATA_SIZE = 3;
+
     public Time() {
     }
 

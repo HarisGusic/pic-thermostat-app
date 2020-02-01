@@ -6,10 +6,10 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 import com.sun.jdi.AbsentInformationException;
 import javafx.application.Platform;
 import pic.thermostat.HomeModel;
+import pic.thermostat.data.Program;
 import pic.thermostat.data.Time;
 
-import static pic.thermostat.comms.Communication.activePort;
-import static pic.thermostat.comms.Communication.readQueue;
+import static pic.thermostat.comms.Communication.*;
 
 public class SerialReader {
 
@@ -22,15 +22,23 @@ public class SerialReader {
 
             @Override
             public void serialEvent(SerialPortEvent serialPortEvent) {
-                if (Communication.status == Communication.REQUEST_RX_TEMP)
-                    onTemperatureDataAvailable();
-                else if (Communication.status == Communication.REQUEST_RX_TIME)
-                    onTimeDataAvailable();
+                switch (status) {
+                    case Communication.REQUEST_RX_TEMP:
+                        onTemperatureDataAvailable();
+                        break;
+                    case Communication.REQUEST_RX_TIME:
+                        onTimeDataAvailable();
+                        break;
+                    case Communication.REQUEST_RX_CURRENT_PROGRAM:
+                        onCurrentProgramDataAvailable();
+                        break;
+                }
+
                 //Remove excess buffer content
                 while (activePort.bytesAvailable() > 0) {
                     byte[] b = new byte[1];
                     activePort.readBytes(b, 1);
-                    System.out.println("Ate: " + b[0]);
+                    System.out.println("Ate: " + b[0]); //TODO remove
                 }
             }
         });
@@ -62,16 +70,37 @@ public class SerialReader {
     }
 
     private static void onTimeDataAvailable() {
-        byte[] data = new byte[3];
+        byte[] data = new byte[Time.DATA_SIZE];
         if (!readWithTimeout(data)) {
             Communication.registerTimeout();
             return;
         }
-        System.out.println(String.format("%x %x %x", data[0], data[1], data[2]));
+        System.out.println(String.format("%x %x %x", data[0], data[1], data[2])); //TODO remove
         try {
             Time time = new Time();
             time.deserialize(data);
             Platform.runLater(() -> HomeModel.setDeviceTime(time));
+        } catch (AbsentInformationException e) {
+            e.printStackTrace();
+        }
+        Communication.onOperationFinished();
+    }
+
+    public static void readCurrentProgram() {
+        if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_CURRENT_PROGRAM)))
+            readQueue.add(Communication.REQUEST_RX_CURRENT_PROGRAM);
+    }
+
+    private static void onCurrentProgramDataAvailable() {
+        byte[] data = new byte[Program.DATA_SIZE];
+        if (!readWithTimeout(data)) {
+            Communication.registerTimeout();
+            return;
+        }
+        try {
+            Program prog = new Program();
+            prog.deserialize(data);
+            Platform.runLater(() -> HomeModel.setCurrentProgram(prog));
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
