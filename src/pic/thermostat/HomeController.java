@@ -45,12 +45,13 @@ public class HomeController extends ContentController {
             // Whenever the temperature changes, change the textual representation as well
             HomeModel.setDisplayTemperature(HomeModel.getTextualTemperature(HomeModel.getTemperature()));
             if (HomeModel.getCurrentProgram() != null)
-                barTemperature.setProgress((float) ((int) newVal - HomeModel.getCurrentProgram().min) / (HomeModel.getCurrentProgram().max - HomeModel.getCurrentProgram().min));
+                updateTemperatureBar();
         });
         HomeModel.currentProgramProperty().addListener((obs, oldVal, newVal) -> {
             // Whenever the current program changes, change the content of Min, Max, Start time and End time
             fldHomeMin.setText(HomeModel.getTextualTemperature(newVal.min));
             fldHomeMax.setText(HomeModel.getTextualTemperature(newVal.max));
+            updateTemperatureBar();
             fldTimeOn.setText(new Time(newVal.startDay, newVal.on).toString());
             fldTimeOff.setText(new Time(newVal.endDay, newVal.off).toString());
         });
@@ -79,6 +80,10 @@ public class HomeController extends ContentController {
                         + ", "
                         + hms
         );
+    }
+
+    private void updateTemperatureBar() {
+        barTemperature.setProgress((float) (HomeModel.getTemperature() - HomeModel.getCurrentProgram().min) / (HomeModel.getCurrentProgram().max - HomeModel.getCurrentProgram().min));
     }
 
     public void setActive(boolean active) {
