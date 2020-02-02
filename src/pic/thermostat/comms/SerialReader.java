@@ -61,7 +61,7 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
-        Communication.status = 0;
+        Communication.onReadOperationFinished();
     }
 
     public static void readTime() {
@@ -83,7 +83,7 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
-        Communication.onOperationFinished();
+        Communication.onReadOperationFinished();
     }
 
     public static void readCurrentProgram() {
@@ -104,7 +104,7 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
-        Communication.onOperationFinished();
+        Communication.onReadOperationFinished();
     }
 
     /**

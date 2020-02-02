@@ -26,6 +26,7 @@ public class Communication {
     public static volatile boolean connected = false;
     static SerialPort activePort;
     volatile static LinkedList<Character> readQueue = new LinkedList<>();
+    volatile static LinkedList<Character> writeQueue = new LinkedList<>();
     private static Timer timer;
     private static volatile boolean timerPaused = false;
     private static int prescaler = 0;
@@ -91,12 +92,14 @@ public class Communication {
             establishConnection();
         else {
             SerialReader.readTemperature();
-            processWriteQueue();
-            processReadQueue();
             if ((prescaler % 10) == 9)
                 SerialReader.readTime();
             if ((prescaler % 5) == 4)
                 SerialReader.readCurrentProgram();
+
+            processWriteQueue();
+            processReadQueue();
+
             prescaler %= 10;
         }
     }
@@ -117,8 +120,17 @@ public class Communication {
 
     public static void registerTimeout() {
         connected = false;
-        readQueue.addFirst(status);
         HomeModel.notifyCommTimeout();
+    }
+
+    public static void onReadOperationFinished() {
+        readQueue.remove();
+        onOperationFinished();
+    }
+
+    public static void onWriteOperationFinished() {
+        writeQueue.remove();
+        onOperationFinished();
     }
 
     public static void onOperationFinished() {
@@ -135,7 +147,6 @@ public class Communication {
         if (Communication.status != 0)
             return;
         Communication.status = readQueue.getFirst();
-        readQueue.remove();
         SerialReader.initialize();
         activePort.writeBytes(new byte[]{(byte) Communication.status}, 1);
     }
