@@ -3,10 +3,12 @@ package pic.thermostat;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import pic.thermostat.data.Time;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +26,7 @@ public class HomeController extends ContentController {
     public TextField fldTimeOn;
     public TextField fldTimeOff;
     public Label labelDeviceTime;
+    public ProgressBar barTemperature;
     private PauseTransition timeUpdater;
 
     public HomeController() {
@@ -31,14 +34,25 @@ public class HomeController extends ContentController {
 
     @FXML
     public void initialize() {
-        // Add listeners to properties
+        /*
+         * Add listeners to properties
+         */
         HomeModel.deviceTimeProperty().addListener((obs, oldVal, newVal) -> {
             // Whenever the time changes, change the textual representation as well
             HomeModel.setDisplayDeviceTime(newVal.toString());
         });
         HomeModel.temperatureProperty().addListener((obs, oldVal, newVal) -> {
             // Whenever the temperature changes, change the textual representation as well
-            HomeModel.setDisplayTemperature(HomeModel.getTextualTemperature());
+            HomeModel.setDisplayTemperature(HomeModel.getTextualTemperature(HomeModel.getTemperature()));
+            if (HomeModel.getCurrentProgram() != null)
+                barTemperature.setProgress((float) ((int) newVal - HomeModel.getCurrentProgram().min) / (HomeModel.getCurrentProgram().max - HomeModel.getCurrentProgram().min));
+        });
+        HomeModel.currentProgramProperty().addListener((obs, oldVal, newVal) -> {
+            // Whenever the current program changes, change the content of Min, Max, Start time and End time
+            fldHomeMin.setText(HomeModel.getTextualTemperature(newVal.min));
+            fldHomeMax.setText(HomeModel.getTextualTemperature(newVal.max));
+            fldTimeOn.setText(new Time(newVal.startDay, newVal.on).toString());
+            fldTimeOff.setText(new Time(newVal.endDay, newVal.off).toString());
         });
 
         // Bind controls to their respective model properties

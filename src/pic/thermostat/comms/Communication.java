@@ -117,6 +117,7 @@ public class Communication {
 
     public static void registerTimeout() {
         connected = false;
+        readQueue.addFirst(status);
         HomeModel.notifyCommTimeout();
     }
 

@@ -39,7 +39,8 @@
         <TextField fx:id="fldHomeTemp" editable="false" prefColumnCount="${fldHomeTemp.length}" text="28 °C"
                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
 
-        <ProgressBar prefHeight="5" prefWidth="${fldHomeTemp.width}" progress="0.5" GridPane.columnIndex="1"
+        <ProgressBar fx:id="barTemperature" prefHeight="5" prefWidth="${fldHomeTemp.width}" progress="0.5"
+                     GridPane.columnIndex="1"
                      GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
 
         <!-- Min temperature -->

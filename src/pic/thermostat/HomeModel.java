@@ -16,7 +16,7 @@ public class HomeModel {
     static HomeController controller;
 
     private static SimpleIntegerProperty temperature = new SimpleIntegerProperty(1024);
-    private static SimpleStringProperty displayTemperature = new SimpleStringProperty(getTextualTemperature());
+    private static SimpleStringProperty displayTemperature = new SimpleStringProperty(getTextualTemperature(getTemperature()));
     private static SimpleObjectProperty<Program> currentProgram = new SimpleObjectProperty<>();
     private static SimpleObjectProperty<Time> deviceTime = new SimpleObjectProperty<>(new Time((byte) 0, (short) 0));
     private static SimpleStringProperty displayDeviceTime = new SimpleStringProperty(deviceTime.get().toString());
@@ -31,8 +31,8 @@ public class HomeModel {
         return (short) (data[0] + ((short) data[1] << 8));
     }
 
-    public static String getTextualTemperature() {
-        return Float.valueOf(new DecimalFormat("#.0").format(5.0 * HomeModel.getTemperature() / 1024.0)) + " °C";
+    public static String getTextualTemperature(int temp) {
+        return Float.valueOf(new DecimalFormat("#.0").format(5.0 * temp / 1024.0)) + " °C";
     }
 
     // Trivial methods
