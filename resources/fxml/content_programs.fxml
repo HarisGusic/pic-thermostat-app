@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="contentPrograms" alignment="TOP_CENTER"
+      spacing="10"
+      style="-fx-background-color: #282C35; -fx-padding: 4em 4em 4em 4em;"
+      fx:controller="pic.thermostat.ProgramsController"
+      fillWidth="false"
+      xmlns="http://javafx.com/javafx">
+    <Accordion>
+        <panes>
+            <TitledPane expanded="false" text="Mon 10:00 - Wed 11:00">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+            </TitledPane>
+            <TitledPane animated="false" text="untitled 2">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+            </TitledPane>
+            <TitledPane animated="false" text="untitled 3">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+            </TitledPane>
+        </panes>
+    </Accordion>
+</VBox>

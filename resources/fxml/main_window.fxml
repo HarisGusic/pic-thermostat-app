@@ -21,14 +21,8 @@
                     <ToggleGroup fx:id="navbarToggle"/>
                 </toggleGroup>
             </ToggleButton>
-            <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" text="Read Programs"
-                          textAlignment="CENTER" fx:id="btnReadPrograms">
-                <toggleGroup>
-                    <fx:reference source="navbarToggle"/>
-                </toggleGroup>
-            </ToggleButton>
-            <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" text="Edit Programs"
-                          textAlignment="CENTER" fx:id="btnEditPrograms">
+            <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" text="Programs"
+                          textAlignment="CENTER" fx:id="btnPrograms">
                 <toggleGroup>
                     <fx:reference source="navbarToggle"/>
                 </toggleGroup>
@@ -39,8 +33,7 @@
     <center>
         <StackPane>
             <fx:include source="content_home.fxml" fx:id="contentHome"/>
-            <fx:include source="content_read_programs.fxml" fx:id="contentReadPrograms" visible="false"/>
-            <fx:include source="content_edit_programs.fxml" fx:id="contentEditPrograms" visible="false"/>
+            <fx:include source="content_programs.fxml" fx:id="contentPrograms" visible="false"/>
         </StackPane>
     </center>
 </BorderPane>

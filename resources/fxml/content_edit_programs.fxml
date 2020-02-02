@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="contentEditPrograms"
-      style="-fx-background-color: #282C35;" xmlns="http://javafx.com/javafx/10.0.2-internal"
-      fx:controller="pic.thermostat.EditProgramsController">
-</VBox>

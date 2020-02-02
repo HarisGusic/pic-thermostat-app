@@ -3,11 +3,11 @@ package pic.thermostat;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
-public class ReadProgramsController extends ContentController {
+public class ProgramsController extends ContentController {
 
-    public VBox contentReadPrograms;
+    public VBox contentPrograms;
 
-    public ReadProgramsController() {
+    public ProgramsController() {
     }
 
     @FXML
@@ -17,6 +17,6 @@ public class ReadProgramsController extends ContentController {
 
     @Override
     public void setActive(boolean active) {
-        contentReadPrograms.setVisible(active);
+        contentPrograms.setVisible(active);
     }
 }
