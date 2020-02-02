@@ -5,12 +5,18 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:id="contentPrograms" alignment="TOP_CENTER"
       spacing="10"
-      style="-fx-background-color: #282C35; -fx-padding: 4em 4em 4em 4em;"
+      style="-fx-background-color: -content; -fx-padding: 4em 4em 4em 4em;"
       fx:controller="pic.thermostat.ProgramsController"
       fillWidth="false"
       xmlns="http://javafx.com/javafx">
+
+    <stylesheets>
+        <URL value="@/css/content_programs.css"/>
+    </stylesheets>
+
     <Accordion>
         <panes>
             <TitledPane expanded="false" text="Mon 10:00 - Wed 11:00">

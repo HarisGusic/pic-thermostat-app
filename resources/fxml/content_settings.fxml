@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="contentSettings" alignment="TOP_CENTER"
+      spacing="10"
+      style="-fx-background-color: -content; -fx-padding: 4em 4em 4em 4em;"
+      fx:controller="pic.thermostat.SettingsController"
+      fillWidth="false"
+      xmlns="http://javafx.com/javafx">
+
+    <stylesheets>
+        <URL value="@/css/content_settings.css"/>
+    </stylesheets>
+
+</VBox>

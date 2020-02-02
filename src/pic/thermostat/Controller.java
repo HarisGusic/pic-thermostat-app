@@ -18,15 +18,20 @@ public class Controller {
     // Navbar buttons
     public ToggleButton btnHome;
     public ToggleButton btnPrograms;
+    public ToggleButton btnSettings;
 
     // Content containers
     public VBox contentHome;
     public VBox contentPrograms;
+    public VBox contentSettings;
 
     @FXML
     private HomeController contentHomeController;
     @FXML
     private ProgramsController contentProgramsController;
+
+    @FXML
+    private SettingsController contentSettingsController;
 
     public Controller() {
 
@@ -48,6 +53,10 @@ public class Controller {
         btnPrograms.selectedProperty().addListener((obs, oldVal, newVal) -> {
             contentProgramsController.setActive(newVal);
             mainLayout.setCenter(contentPrograms);
+        });
+        btnSettings.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            contentSettingsController.setActive(newVal);
+            mainLayout.setCenter(contentSettings);
         });
     }
 }

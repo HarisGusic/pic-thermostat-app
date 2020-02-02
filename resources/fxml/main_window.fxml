@@ -27,6 +27,12 @@
                     <fx:reference source="navbarToggle"/>
                 </toggleGroup>
             </ToggleButton>
+            <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" text="Settings"
+                          textAlignment="CENTER" fx:id="btnSettings">
+                <toggleGroup>
+                    <fx:reference source="navbarToggle"/>
+                </toggleGroup>
+            </ToggleButton>
         </VBox>
     </left>
 
@@ -34,6 +40,7 @@
         <StackPane>
             <fx:include source="content_home.fxml" fx:id="contentHome"/>
             <fx:include source="content_programs.fxml" fx:id="contentPrograms" visible="false"/>
+            <fx:include source="content_settings.fxml" fx:id="contentSettings" visible="false"/>
         </StackPane>
     </center>
 </BorderPane>
