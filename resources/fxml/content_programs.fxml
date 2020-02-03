@@ -14,16 +14,12 @@
     </stylesheets>
     <ButtonBar prefHeight="40.0">
         <buttons>
-            <Button mnemonicParsing="false" text="Read" ButtonBar.buttonData="LEFT"/>
-            <Button mnemonicParsing="false" text="Send" ButtonBar.buttonData="RIGHT"/>
+            <Button fx:id="btnRead" mnemonicParsing="false" text="Read" ButtonBar.buttonData="LEFT"/>
+            <Button fx:id="btnSend" mnemonicParsing="false" text="Send" ButtonBar.buttonData="RIGHT"/>
         </buttons>
     </ButtonBar>
 
-    <Accordion>
-        <panes>
-            <fx:include source="program.fxml"/>
-            <fx:include source="program.fxml"/>
-            <fx:include source="program.fxml"/>
-        </panes>
+    <Accordion fx:id="accordion">
+
     </Accordion>
 </VBox>

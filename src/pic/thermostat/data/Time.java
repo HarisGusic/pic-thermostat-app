@@ -58,8 +58,8 @@ public class Time implements Serializable {
     @Override
     public String toString() {
         // NOTE: Should always reflect the format of struct Time on the microcontroller.
-        return new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}[day] + ", "
-                + LocalTime.of(timeOfDay / 60, timeOfDay % 60).format(DateTimeFormatter.ofPattern("HH:mm"));
+        return new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}[day % 7] + ", "
+                + LocalTime.of(timeOfDay / 60 % 24, timeOfDay % 60).format(DateTimeFormatter.ofPattern("HH:mm")); //FIXME only for debugging
     }
 
     @Override

@@ -6,12 +6,19 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 import com.sun.jdi.AbsentInformationException;
 import javafx.application.Platform;
 import pic.thermostat.HomeModel;
+import pic.thermostat.ProgramsModel;
 import pic.thermostat.data.Program;
 import pic.thermostat.data.Time;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static pic.thermostat.comms.Communication.*;
 
 public class SerialReader {
+
+    private static int programSize = 0;
 
     public static void initialize() {
         //Remove excess buffer content
@@ -25,19 +32,22 @@ public class SerialReader {
             @Override
             public void serialEvent(SerialPortEvent serialPortEvent) {
                 switch (status) {
-                    case Communication.REQUEST_RX_TEMP:
+                    case REQUEST_RX_TEMP:
                         onTemperatureDataAvailable();
                         break;
-                    case Communication.REQUEST_RX_TIME:
+                    case REQUEST_RX_TIME:
                         onTimeDataAvailable();
                         break;
-                    case Communication.REQUEST_RX_CURRENT_PROGRAM:
+                    case REQUEST_RX_CURRENT_PROGRAM:
                         onCurrentProgramDataAvailable();
                         break;
+                    case REQUEST_RX_N_PROGRAMS:
+                        onProgramSizeAvailable();
+                        break;
+                    case REQUEST_RX_PROGRAMS:
+                        onProgramsAvailable();
+                        break;
                 }
-                //Remove excess buffer content
-                clearBuffer();
-                Communication.onOperationFinished();
             }
         });
     }
@@ -63,6 +73,9 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
+        //Remove excess buffer content
+        clearBuffer();
+        Communication.onOperationFinished();
     }
 
     public static void readTime() {
@@ -88,6 +101,9 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
+        //Remove excess buffer content
+        clearBuffer();
+        Communication.onOperationFinished();
     }
 
     public static void readCurrentProgram() {
@@ -112,6 +128,49 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
+        //Remove excess buffer content
+        clearBuffer();
+        Communication.onOperationFinished();
+    }
+
+    public static void readPrograms() {
+        if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_N_PROGRAMS)))
+            readQueue.add(Communication.REQUEST_RX_N_PROGRAMS);
+        if (status == 0)
+            Communication.processWriteQueue();
+        if (status == 0)
+            Communication.processReadQueue();
+    }
+
+    private static void onProgramSizeAvailable() {
+        status = REQUEST_RX_PROGRAMS;
+        byte[] size = new byte[1];
+        activePort.readBytes(size, 1);
+        programSize = 0 * (size[0]) + 2; //FIXME Only for debugging purposes
+        // Initiate transmission
+        activePort.writeBytes(new byte[]{REQUEST_RX_PROGRAMS}, 1);
+    }
+
+    private static void onProgramsAvailable() {
+        byte[] data = new byte[programSize * Program.DATA_SIZE];
+        if (!readWithTimeout(data)) {
+            Communication.registerTimeout();
+            return;
+        }
+        List<Program> programs = new ArrayList<>(programSize);
+        try {
+            for (int i = 0; i < programSize; ++i) {
+                Program program = new Program();
+                program.deserialize(Arrays.copyOfRange(data, Program.DATA_SIZE * i, Program.DATA_SIZE * (i + 1)));
+                programs.add(program);
+            }
+            ProgramsModel.reloadPrograms(programs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Remove excess buffer content
+        clearBuffer();
+        Communication.onOperationFinished();
     }
 
     /**

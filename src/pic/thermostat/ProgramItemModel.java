@@ -10,13 +10,17 @@ import java.util.Date;
 
 public class ProgramItemModel {
 
-    SimpleObjectProperty<Program> program = new SimpleObjectProperty<>(new Program());
+    SimpleObjectProperty<Program> program;
+
+    public ProgramItemModel(Program prog) {
+        program = new SimpleObjectProperty<>(prog);
+    }
 
     public static Time parseTime(String s) throws ParseException {
         //TODO deprecated
         Date date = new SimpleDateFormat("EEE, HH:mm").parse(s);
         Time time = new Time();
-        time.day = (byte) (date.getDay() - 1);
+        time.day = (byte) ((date.getDay() + 6) % 7);
         time.timeOfDay = (short) (date.getHours() * 60 + date.getMinutes());
         return time;
     }

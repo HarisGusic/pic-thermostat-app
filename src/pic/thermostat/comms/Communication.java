@@ -13,9 +13,11 @@ public class Communication {
             REQUEST_RX_TIME = 'T',
             REQUEST_RX_CURRENT_PROGRAM = '&',
             REQUEST_RX_PROGRAMS = '>',
+            REQUEST_RX_N_PROGRAMS = 'N',
             REQUEST_TX_TIME = 't',
             REQUEST_TX_PROGRAM = 'p',
-            REQUEST_TX_PROGRAMS = '<';
+            REQUEST_TX_PROGRAMS = '<',
+            REQUEST_TX_N_PROGRAMS = 'n';
 
     public static final int TIMEOUT = 100;
 
@@ -112,6 +114,10 @@ public class Communication {
         connected = false;
         readQueue.addFirst(status);
         HomeModel.notifyCommTimeout();
+        if (status == 0)
+            processWriteQueue();
+        if (status == 0)
+            processReadQueue();
     }
 
     public static void onOperationFinished() {

@@ -69,6 +69,8 @@ public class Program implements Serializable {
 
     @Override
     public boolean equals(Object o) {
+        if (o == null)
+            return false;
         Program program = (Program) o;
         return min == program.min && max == program.max && start.equals(program.start) && end.equals(program.end);
     }

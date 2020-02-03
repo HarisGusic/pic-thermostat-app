@@ -23,9 +23,14 @@ public class ProgramItemController {
 
     private ProgramItemModel model;
 
+    public ProgramItemController(ProgramItemModel model) {
+        this.model = model;
+    }
+
     @FXML
     public void initialize() {
-        model = new ProgramItemModel();
+
+        updateUI();
 
         btnEdit.setOnAction(e -> {
             if (isEditButton) {
@@ -56,10 +61,20 @@ public class ProgramItemController {
             program.end = ProgramItemModel.parseTime(fldEnd.getText());
             program.min = ProgramItemModel.parseTemperature(fldMin.getText());
             program.max = ProgramItemModel.parseTemperature(fldMax.getText());
+            if (!model.getProgram().equals(program))
+                ProgramsModel.hasChanged = true;
             model.setProgram(program);
         } catch (ParseException e) {
             //TODO notify the user
             e.printStackTrace();
         }
+    }
+
+    private void updateUI() {
+        fldStart.setText(model.getProgram().start.toString());
+        fldEnd.setText(model.getProgram().end.toString());
+        title.setText(model.getProgram().start.toString() + " - " + model.getProgram().end.toString());
+        fldMin.setText(HomeModel.getTextualTemperature(model.getProgram().min));
+        fldMax.setText(HomeModel.getTextualTemperature(model.getProgram().max));
     }
 }

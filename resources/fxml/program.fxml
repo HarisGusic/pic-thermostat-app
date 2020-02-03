@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <TitledPane xmlns:fx="http://javafx.com/fxml/1" fx:id="title" expanded="true" text="Mon, 10:00 - Wed, 11:00"
-            xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="pic.thermostat.ProgramItemController">
+            xmlns="http://javafx.com/javafx/10.0.2-internal">
 
     <AnchorPane fx:id="content" minHeight="0.0" minWidth="0.0" prefWidth="200.0" styleClass="accordion-content">
         <TextField fx:id="fldStart" text="Mon, 10:00" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="26.0"
