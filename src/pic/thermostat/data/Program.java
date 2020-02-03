@@ -11,8 +11,7 @@ import java.io.Serializable;
  */
 public class Program implements Serializable {
 
-    public byte startDay, endDay;
-    public short on, off;
+    public Time start = new Time(), end = new Time();
     public short min, max;
 
     public static final int DATA_SIZE = 10;
@@ -26,10 +25,10 @@ public class Program implements Serializable {
     }
 
     public void copy(Program prog) {
-        startDay = prog.startDay;
-        endDay = prog.endDay;
-        on = prog.on;
-        off = prog.off;
+        start.day = prog.start.day;
+        end.day = prog.end.day;
+        start.timeOfDay = prog.start.timeOfDay;
+        end.timeOfDay = prog.end.timeOfDay;
         min = prog.min;
         max = prog.max;
     }
@@ -40,12 +39,12 @@ public class Program implements Serializable {
      */
     public byte[] serialize() {
         return new byte[]{
-                startDay,
-                endDay,
-                (byte) (on & 0xff),
-                (byte) (on >> 8),
-                (byte) (off & 0xff),
-                (byte) (off >> 8),
+                start.day,
+                (byte) (start.timeOfDay & 0xff),
+                (byte) (start.timeOfDay >> 8),
+                end.day,
+                (byte) (end.timeOfDay & 0xff),
+                (byte) (end.timeOfDay >> 8),
                 (byte) (min & 0xff),
                 (byte) (min >> 8),
                 (byte) (max & 0xff),
@@ -60,10 +59,10 @@ public class Program implements Serializable {
     public void deserialize(byte[] rawData) throws AbsentInformationException {
         if (rawData.length < 10)
             throw new AbsentInformationException("Byte data is incomplete");
-        startDay = rawData[0];
-        endDay = rawData[1];
-        on = (short) (rawData[2] + ((short) rawData[3] << 8));
-        off = (short) (rawData[4] + ((short) rawData[5] << 8));
+        start.day = rawData[0];
+        start.timeOfDay = (short) (rawData[1] + ((short) rawData[2] << 8));
+        end.day = rawData[3];
+        end.timeOfDay = (short) (rawData[4] + ((short) rawData[5] << 8));
         min = (short) (rawData[6] + ((short) rawData[7] << 8));
         max = (short) (rawData[8] + ((short) rawData[9] << 8));
     }

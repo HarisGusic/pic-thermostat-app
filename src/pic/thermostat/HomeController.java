@@ -52,8 +52,8 @@ public class HomeController extends ContentController {
             fldHomeMin.setText(HomeModel.getTextualTemperature(newVal.min));
             fldHomeMax.setText(HomeModel.getTextualTemperature(newVal.max));
             updateTemperatureBar();
-            fldTimeOn.setText(new Time(newVal.startDay, newVal.on).toString());
-            fldTimeOff.setText(new Time(newVal.endDay, newVal.off).toString());
+            fldTimeOn.setText(new Time(newVal.start.day, newVal.start.timeOfDay).toString());
+            fldTimeOff.setText(new Time(newVal.end.day, newVal.end.timeOfDay).toString());
         });
 
         // Bind controls to their respective model properties

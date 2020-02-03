@@ -13,9 +13,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class Time implements Serializable {
 
-    private byte day = 0;
+    public byte day = 0;
     // In this version: the number of minutes that have passed today
-    private short timeOfDay = 0;
+    public short timeOfDay = 0;
 
     public static final int DATA_SIZE = 3;
 
