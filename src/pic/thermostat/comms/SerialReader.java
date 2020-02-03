@@ -45,6 +45,10 @@ public class SerialReader {
     public static void readTemperature() {
         if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_TEMP)))
             readQueue.add(Communication.REQUEST_RX_TEMP);
+        if (status == 0)
+            Communication.processWriteQueue();
+        if (status == 0)
+            Communication.processReadQueue();
     }
 
     private static void onTemperatureDataAvailable() {
@@ -64,6 +68,10 @@ public class SerialReader {
     public static void readTime() {
         if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_TIME)))
             readQueue.add(Communication.REQUEST_RX_TIME);
+        if (status == 0)
+            Communication.processWriteQueue();
+        if (status == 0)
+            Communication.processReadQueue();
     }
 
     private static void onTimeDataAvailable() {
@@ -85,6 +93,10 @@ public class SerialReader {
     public static void readCurrentProgram() {
         if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_CURRENT_PROGRAM)))
             readQueue.add(Communication.REQUEST_RX_CURRENT_PROGRAM);
+        if (status == 0)
+            Communication.processWriteQueue();
+        if (status == 0)
+            Communication.processReadQueue();
     }
 
     private static void onCurrentProgramDataAvailable() {

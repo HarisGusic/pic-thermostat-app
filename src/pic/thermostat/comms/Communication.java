@@ -20,10 +20,9 @@ public class Communication {
     public static final int TIMEOUT = 100;
 
     public static final boolean OPERATION_READ = true, OPERATION_WRITE = false;
-
+    public static volatile boolean connected = false;
     static volatile char status;
     static volatile boolean operationType = OPERATION_READ;
-    public static volatile boolean connected = false;
     static SerialPort activePort;
     volatile static LinkedList<Character> readQueue = new LinkedList<>();
     volatile static LinkedList<Character> writeQueue = new LinkedList<>();
@@ -91,15 +90,12 @@ public class Communication {
         if (!connected)
             establishConnection();
         else {
-            SerialReader.readTemperature();
             if ((prescaler % 10) == 9)
                 SerialReader.readTime();
-            if ((prescaler % 5) == 4)
+            else if ((prescaler % 5) == 4)
                 SerialReader.readCurrentProgram();
-            if (status == 0)
-                processWriteQueue();
-            if (status == 0)
-                processReadQueue();
+            else
+                SerialReader.readTemperature();
 
             prescaler %= 10;
         }
@@ -133,12 +129,12 @@ public class Communication {
             processReadQueue();
     }
 
-    private static void processWriteQueue() {
+    static void processWriteQueue() {
         if (writeQueue.isEmpty())
             return;
     }
 
-    private static void processReadQueue() {
+    static void processReadQueue() {
         if (readQueue.isEmpty())
             return;
         Communication.status = readQueue.getFirst();
