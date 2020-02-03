@@ -1,1 +1,32 @@
 @import 'colors.css';
+
+.label {
+    -fx-font-size: 12;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -menu;
+    -fx-border-color: -border;
+}
+
+.titled-pane > .title > .arrow-button > .arrow {
+    -fx-background-color: -text;
+}
+
+.titled-pane:focused > .title > .arrow-button > .arrow {
+    -fx-effect: dropshadow(two-pass-box, -accent, 5, 0.2, 0, 0);
+}
+
+.titled-pane > .content {
+    -fx-background-color: -border;
+    -fx-border-color: -border;
+}
+
+.accordion-content {
+    -fx-background-color: -content;
+}
+
+/*
+.button {
+    -fx-background-color: -menu;
+}*/

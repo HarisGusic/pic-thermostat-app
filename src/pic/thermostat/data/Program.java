@@ -67,4 +67,18 @@ public class Program implements Serializable {
         max = (short) (rawData[8] + ((short) rawData[9] << 8));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        Program program = (Program) o;
+        return min == program.min && max == program.max && start.equals(program.start) && end.equals(program.end);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = start.hashCode();
+        result = 31 * result + end.hashCode();
+        result = 31 * result + (int) min;
+        result = 31 * result + (int) max;
+        return result;
+    }
 }

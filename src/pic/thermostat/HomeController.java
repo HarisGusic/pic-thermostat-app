@@ -8,12 +8,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import pic.thermostat.comms.Communication;
 import pic.thermostat.data.Time;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeController extends ContentController {
 
@@ -66,7 +69,7 @@ public class HomeController extends ContentController {
             updateClock();
             timeUpdater.playFromStart();
         });
-        timeUpdater.play();
+        setActive(true);
     }
 
     /*
@@ -87,6 +90,19 @@ public class HomeController extends ContentController {
     }
 
     public void setActive(boolean active) {
+        if (active) {
+            // Initiate periodic data acquisition
+            Communication.timer = new Timer();
+            Communication.timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Communication.update();
+                }
+            }, 0, 1000);
+        } else {
+            Communication.timer.cancel();
+            Communication.timer = null;
+        }
         contentHome.setVisible(active);
         if (active)
             timeUpdater.play();

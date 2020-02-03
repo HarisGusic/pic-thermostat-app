@@ -32,7 +32,15 @@ public class HomeModel {
     }
 
     public static String getTextualTemperature(int temp) {
-        return Float.valueOf(new DecimalFormat("#.0").format(5.0 * temp / 1024.0)) + " °C";
+        return Float.valueOf(new DecimalFormat("#.0").format(getDecimalTemperature(temp))) + " °C";
+    }
+
+    public static float getDecimalTemperature(int temp) {
+        return (float) (5.0 * temp / 1024.0);
+    }
+
+    public static short getRawTemperature(float temp) {
+        return (short) (temp / 5 * 1024);
     }
 
     // Trivial methods

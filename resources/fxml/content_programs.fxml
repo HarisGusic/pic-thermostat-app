@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:id="contentPrograms" alignment="TOP_CENTER"
-      spacing="10"
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="contentPrograms" alignment="TOP_CENTER" fillWidth="false"
       style="-fx-background-color: -content; -fx-padding: 4em 4em 4em 4em;"
-      fx:controller="pic.thermostat.ProgramsController"
-      fillWidth="false"
-      xmlns="http://javafx.com/javafx">
+      spacing="10" xmlns="http://javafx.com/javafx/10.0.2-internal"
+      fx:controller="pic.thermostat.ProgramsController">
 
     <stylesheets>
+        <URL value="@/css/common.css"/>
         <URL value="@/css/content_programs.css"/>
     </stylesheets>
+    <ButtonBar prefHeight="40.0">
+        <buttons>
+            <Button mnemonicParsing="false" text="Read" ButtonBar.buttonData="LEFT"/>
+            <Button mnemonicParsing="false" text="Send" ButtonBar.buttonData="RIGHT"/>
+        </buttons>
+    </ButtonBar>
 
     <Accordion>
         <panes>
-            <TitledPane expanded="false" text="Mon 10:00 - Wed 11:00">
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-            </TitledPane>
-            <TitledPane animated="false" text="untitled 2">
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-            </TitledPane>
-            <TitledPane animated="false" text="untitled 3">
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-            </TitledPane>
+            <fx:include source="program.fxml"/>
+            <fx:include source="program.fxml"/>
+            <fx:include source="program.fxml"/>
         </panes>
     </Accordion>
 </VBox>

@@ -13,6 +13,7 @@
         <VBox id="nav-box" fx:id="navbar" maxWidth="${mainLayout.width}" prefHeight="${mainLayout.height}"
               prefWidth="200.0" BorderPane.alignment="CENTER">
             <stylesheets>
+                <URL value="@/css/common.css"/>
                 <URL value="@/css/navbar.css"/>
             </stylesheets>
             <ToggleButton mnemonicParsing="false" prefWidth="${navbar.width}" selected="true" text="Home"

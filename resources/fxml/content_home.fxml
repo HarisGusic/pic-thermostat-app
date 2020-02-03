@@ -10,6 +10,7 @@
       xmlns="http://javafx.com/javafx">
 
     <stylesheets>
+        <URL value="@/css/common.css"/>
         <URL value="@/css/content_home.css"/>
     </stylesheets>
 

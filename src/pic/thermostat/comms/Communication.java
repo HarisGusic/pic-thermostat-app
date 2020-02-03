@@ -26,7 +26,7 @@ public class Communication {
     static SerialPort activePort;
     volatile static LinkedList<Character> readQueue = new LinkedList<>();
     volatile static LinkedList<Character> writeQueue = new LinkedList<>();
-    private static Timer timer;
+    public static Timer timer;
     private static volatile boolean timerPaused = false;
     private static int prescaler = 0;
 
@@ -61,7 +61,7 @@ public class Communication {
         return found;
     }
 
-    public static void initialize() throws Exception {
+    public static void initialize() {
         System.out.println(Arrays.toString(SerialPort.getCommPorts()));
         List<SerialPort> ports = getUnusedSerialPorts();
         if (ports.isEmpty())
@@ -72,18 +72,11 @@ public class Communication {
         activePort.openPort();
 
         establishConnection();
-
-        // Initiate periodic data acquisition
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                update();
-            }
-        }, 0, 1000);
     }
 
-    private static void update() {
+    public static void update() {
+        if (activePort == null)
+            return;
         ++prescaler;
         if (timerPaused)
             return;
