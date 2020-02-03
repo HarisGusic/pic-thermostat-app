@@ -96,9 +96,10 @@ public class Communication {
                 SerialReader.readTime();
             if ((prescaler % 5) == 4)
                 SerialReader.readCurrentProgram();
-
-            processWriteQueue();
-            processReadQueue();
+            if (status == 0)
+                processWriteQueue();
+            if (status == 0)
+                processReadQueue();
 
             prescaler %= 10;
         }
@@ -120,33 +121,28 @@ public class Communication {
 
     public static void registerTimeout() {
         connected = false;
+        readQueue.addFirst(status);
         HomeModel.notifyCommTimeout();
-    }
-
-    public static void onReadOperationFinished() {
-        readQueue.remove();
-        onOperationFinished();
-    }
-
-    public static void onWriteOperationFinished() {
-        writeQueue.remove();
-        onOperationFinished();
     }
 
     public static void onOperationFinished() {
         Communication.status = 0;
-        processWriteQueue();
-        processReadQueue();
+        if (status == 0)
+            processWriteQueue();
+        if (status == 0)
+            processReadQueue();
     }
 
     private static void processWriteQueue() {
-        //TODO implement
+        if (writeQueue.isEmpty())
+            return;
     }
 
     private static void processReadQueue() {
-        if (Communication.status != 0)
+        if (readQueue.isEmpty())
             return;
         Communication.status = readQueue.getFirst();
+        readQueue.remove();
         SerialReader.initialize();
         activePort.writeBytes(new byte[]{(byte) Communication.status}, 1);
     }

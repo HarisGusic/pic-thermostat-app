@@ -14,6 +14,8 @@ import static pic.thermostat.comms.Communication.*;
 public class SerialReader {
 
     public static void initialize() {
+        //Remove excess buffer content
+        clearBuffer();
         activePort.addDataListener(new SerialPortDataListener() {
             @Override
             public int getListeningEvents() {
@@ -33,13 +35,9 @@ public class SerialReader {
                         onCurrentProgramDataAvailable();
                         break;
                 }
-
                 //Remove excess buffer content
-                while (activePort.bytesAvailable() > 0) {
-                    byte[] b = new byte[1];
-                    activePort.readBytes(b, 1);
-                    System.out.println("Ate: " + b[0]); //TODO remove
-                }
+                clearBuffer();
+                Communication.onOperationFinished();
             }
         });
     }
@@ -61,7 +59,6 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
-        Communication.onReadOperationFinished();
     }
 
     public static void readTime() {
@@ -83,7 +80,6 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
-        Communication.onReadOperationFinished();
     }
 
     public static void readCurrentProgram() {
@@ -104,7 +100,6 @@ public class SerialReader {
         } catch (AbsentInformationException e) {
             e.printStackTrace();
         }
-        Communication.onReadOperationFinished();
     }
 
     /**
@@ -117,6 +112,11 @@ public class SerialReader {
         long time = System.currentTimeMillis();
         activePort.readBytes(destination, destination.length);
         return System.currentTimeMillis() - time < Communication.TIMEOUT;
+    }
+
+    static void clearBuffer() {
+        int available = activePort.bytesAvailable();
+        activePort.readBytes(new byte[available], available);
     }
 
 }
