@@ -73,6 +73,11 @@ public class Time implements Serializable {
         return day + timeOfDay * 256;
     }
 
+    @Override
+    public Object clone() {
+        return new Time(day, timeOfDay);
+    }
+
     public byte getDay() {
         return day;
     }

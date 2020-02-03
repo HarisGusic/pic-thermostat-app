@@ -27,7 +27,6 @@ public class Communication {
     static volatile boolean operationType = OPERATION_READ;
     static SerialPort activePort;
     volatile static LinkedList<Character> readQueue = new LinkedList<>();
-    volatile static LinkedList<Character> writeQueue = new LinkedList<>();
     public static Timer timer;
     private static volatile boolean timerPaused = false;
     private static int prescaler = 0;
@@ -70,7 +69,7 @@ public class Communication {
             return;
         activePort = ports.get(0);
         activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, 0);
+        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, TIMEOUT, 0);
         activePort.openPort();
 
         establishConnection();
@@ -115,22 +114,14 @@ public class Communication {
         readQueue.addFirst(status);
         HomeModel.notifyCommTimeout();
         if (status == 0)
-            processWriteQueue();
-        if (status == 0)
             processReadQueue();
     }
 
     public static void onOperationFinished() {
         Communication.status = 0;
-        if (status == 0)
-            processWriteQueue();
+        SerialWriter.processWriteQueue();
         if (status == 0)
             processReadQueue();
-    }
-
-    static void processWriteQueue() {
-        if (writeQueue.isEmpty())
-            return;
     }
 
     static void processReadQueue() {

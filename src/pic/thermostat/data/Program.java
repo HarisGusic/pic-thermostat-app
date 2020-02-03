@@ -83,4 +83,14 @@ public class Program implements Serializable {
         result = 31 * result + (int) max;
         return result;
     }
+
+    @Override
+    public Object clone() {
+        Program prog = new Program();
+        prog.start = (Time) start.clone();
+        prog.end = (Time) end.clone();
+        prog.min = min;
+        prog.max = max;
+        return prog;
+    }
 }

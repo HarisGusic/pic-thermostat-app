@@ -64,6 +64,7 @@ public class ProgramItemController {
             if (!model.getProgram().equals(program))
                 ProgramsModel.hasChanged = true;
             model.setProgram(program);
+            ProgramsModel.getPrograms().set(model.index, program);
         } catch (ParseException e) {
             //TODO notify the user
             e.printStackTrace();

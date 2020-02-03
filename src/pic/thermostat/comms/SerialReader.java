@@ -56,7 +56,7 @@ public class SerialReader {
         if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_TEMP)))
             readQueue.add(Communication.REQUEST_RX_TEMP);
         if (status == 0)
-            Communication.processWriteQueue();
+            SerialWriter.processWriteQueue();
         if (status == 0)
             Communication.processReadQueue();
     }
@@ -68,11 +68,13 @@ public class SerialReader {
             return;
         }
         System.out.println(String.format("%x %x", data[0], data[1]));
-        try {
-            HomeModel.setTemperature(HomeModel.deserializeTemperature(data));
-        } catch (AbsentInformationException e) {
-            e.printStackTrace();
-        }
+        Platform.runLater(() -> {
+            try {
+                HomeModel.setTemperature(HomeModel.deserializeTemperature(data));
+            } catch (AbsentInformationException e) {
+                e.printStackTrace();
+            }
+        });
         //Remove excess buffer content
         clearBuffer();
         Communication.onOperationFinished();
@@ -82,7 +84,7 @@ public class SerialReader {
         if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_TIME)))
             readQueue.add(Communication.REQUEST_RX_TIME);
         if (status == 0)
-            Communication.processWriteQueue();
+            SerialWriter.processWriteQueue();
         if (status == 0)
             Communication.processReadQueue();
     }
@@ -110,7 +112,7 @@ public class SerialReader {
         if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_CURRENT_PROGRAM)))
             readQueue.add(Communication.REQUEST_RX_CURRENT_PROGRAM);
         if (status == 0)
-            Communication.processWriteQueue();
+            SerialWriter.processWriteQueue();
         if (status == 0)
             Communication.processReadQueue();
     }
@@ -137,7 +139,7 @@ public class SerialReader {
         if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_N_PROGRAMS)))
             readQueue.add(Communication.REQUEST_RX_N_PROGRAMS);
         if (status == 0)
-            Communication.processWriteQueue();
+            SerialWriter.processWriteQueue();
         if (status == 0)
             Communication.processReadQueue();
     }

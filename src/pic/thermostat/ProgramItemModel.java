@@ -12,8 +12,11 @@ public class ProgramItemModel {
 
     SimpleObjectProperty<Program> program;
 
-    public ProgramItemModel(Program prog) {
+    int index;
+
+    public ProgramItemModel(Program prog, int index) {
         program = new SimpleObjectProperty<>(prog);
+        this.index = index;
     }
 
     public static Time parseTime(String s) throws ParseException {

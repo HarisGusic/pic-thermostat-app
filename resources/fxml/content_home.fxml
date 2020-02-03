@@ -18,8 +18,11 @@
     <VBox alignment="CENTER">
         <Label fx:id="labelTime" styleClass="display-time" text="Sat, 00:00:00"/>
         <Separator prefWidth="${labelTime.width}"/>
-        <Label fx:id="labelDeviceTime" styleClass="display-time" text="Sat, 00:00"
-               style="-fx-font-size: 16; -fx-opacity: 0.8;"/>
+        <HBox>
+            <Button fx:id="btnDownloadTime" prefWidth="30" prefHeight="30" text="D"/>
+            <Label fx:id="labelDeviceTime" styleClass="display-time" text="Sat, 00:00"
+                   style="-fx-font-size: 16; -fx-opacity: 0.8;"/>
+        </HBox>
     </VBox>
 
     <!-- Temperature group -->

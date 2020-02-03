@@ -11,8 +11,9 @@ import java.util.List;
 public class ProgramsModel {
 
     public static ObservableList<Program> programs = FXCollections.observableArrayList();
+    static ProgramsController controller;
 
-    static boolean hasChanged = false;
+    static boolean hasChanged = false, shouldReload = false;
 
     public static void populate() {
         SerialReader.readPrograms();
@@ -27,7 +28,11 @@ public class ProgramsModel {
     }
 
     public static void reloadPrograms(List<Program> programs) {
-        Platform.runLater(() -> ProgramsModel.getPrograms().setAll(FXCollections.observableArrayList(programs)));
+        Platform.runLater(() -> {
+                    ProgramsModel.getPrograms().setAll(FXCollections.observableArrayList(programs));
+                    controller.updateUI();
+                }
+        );
     }
 
 }

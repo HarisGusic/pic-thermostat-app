@@ -2,6 +2,7 @@ package pic.thermostat;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -9,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import pic.thermostat.comms.Communication;
+import pic.thermostat.comms.SerialWriter;
 import pic.thermostat.data.Time;
 
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class HomeController extends ContentController {
     public TextField fldTimeOff;
     public Label labelDeviceTime;
     public ProgressBar barTemperature;
+    public Button btnDownloadTime;
     private PauseTransition timeUpdater;
 
     public HomeController() {
@@ -62,6 +65,10 @@ public class HomeController extends ContentController {
         // Bind controls to their respective model properties
         labelDeviceTime.textProperty().bind(HomeModel.displayDeviceTimeProperty());
         fldHomeTemp.textProperty().bind(HomeModel.displayTemperatureProperty());
+        btnDownloadTime.setOnAction(e -> {
+            LocalDateTime time = LocalDateTime.now();
+            SerialWriter.sendTime(new Time((byte) ((time.getDayOfWeek().getValue() + 6) % 7), (short) (time.getHour() * 60 + time.getMinute())));
+        });
 
         // Periodically update the home screen GUI
         timeUpdater = new PauseTransition(Duration.seconds(0.1));
