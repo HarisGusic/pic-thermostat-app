@@ -4,6 +4,20 @@
     -fx-text-fill: -text;
 }
 
+.button {
+    -fx-background-color: -menu;
+    -fx-border-color: -border;
+    -fx-border-radius: 2;
+}
+
+.button:hover {
+    -fx-background-color: -content;
+}
+
+.button:pressed {
+    -fx-background-color: -field;
+}
+
 .label {
     -fx-text-fill: -text;
     -fx-font-size: 14;
