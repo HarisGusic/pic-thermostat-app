@@ -12,11 +12,14 @@ import pic.thermostat.data.Time;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static pic.thermostat.comms.Communication.*;
 
 public class SerialReader {
+
+    volatile static LinkedList<Character> readQueue = new LinkedList<>();
 
     private static int programSize = 0;
 
@@ -58,13 +61,13 @@ public class SerialReader {
         if (status == 0)
             SerialWriter.processWriteQueue();
         if (status == 0)
-            Communication.processReadQueue();
+            processReadQueue();
     }
 
     private static void onTemperatureDataAvailable() {
         byte[] data = new byte[2];
         if (!readWithTimeout(data)) {
-            Communication.registerTimeout();
+            registerTimeout();
             return;
         }
         System.out.println(String.format("%x %x", data[0], data[1]));
@@ -86,13 +89,13 @@ public class SerialReader {
         if (status == 0)
             SerialWriter.processWriteQueue();
         if (status == 0)
-            Communication.processReadQueue();
+            processReadQueue();
     }
 
     private static void onTimeDataAvailable() {
         byte[] data = new byte[Time.DATA_SIZE];
         if (!readWithTimeout(data)) {
-            Communication.registerTimeout();
+            registerTimeout();
             return;
         }
         System.out.println(String.format("%x %x %x", data[0], data[1], data[2])); //TODO remove
@@ -114,13 +117,13 @@ public class SerialReader {
         if (status == 0)
             SerialWriter.processWriteQueue();
         if (status == 0)
-            Communication.processReadQueue();
+            processReadQueue();
     }
 
     private static void onCurrentProgramDataAvailable() {
         byte[] data = new byte[Program.DATA_SIZE];
         if (!readWithTimeout(data)) {
-            Communication.registerTimeout();
+            registerTimeout();
             return;
         }
         try {
@@ -141,7 +144,7 @@ public class SerialReader {
         if (status == 0)
             SerialWriter.processWriteQueue();
         if (status == 0)
-            Communication.processReadQueue();
+            processReadQueue();
     }
 
     private static void onProgramSizeAvailable() {
@@ -156,7 +159,7 @@ public class SerialReader {
     private static void onProgramsAvailable() {
         byte[] data = new byte[programSize * Program.DATA_SIZE];
         if (!readWithTimeout(data)) {
-            Communication.registerTimeout();
+            registerTimeout();
             return;
         }
         List<Program> programs = new ArrayList<>(programSize);
@@ -190,6 +193,22 @@ public class SerialReader {
     static void clearBuffer() {
         int available = activePort.bytesAvailable();
         activePort.readBytes(new byte[available], available);
+    }
+
+    static void processReadQueue() {
+        if (readQueue.isEmpty())
+            return;
+        Communication.status = readQueue.getFirst();
+        readQueue.remove();
+        SerialReader.initialize();
+        activePort.writeBytes(new byte[]{(byte) Communication.status}, 1);
+    }
+
+    public static void registerTimeout() {
+        connected = false;
+        readQueue.addFirst(status);
+        HomeModel.notifyCommTimeout();
+        processReadQueue();
     }
 
 }

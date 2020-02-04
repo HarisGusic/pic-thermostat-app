@@ -1,9 +1,11 @@
 package pic.thermostat.comms;
 
 import com.fazecast.jSerialComm.SerialPort;
-import pic.thermostat.HomeModel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
 
 public class Communication {
 
@@ -26,7 +28,6 @@ public class Communication {
     static volatile char status;
     static volatile boolean operationType = OPERATION_READ;
     static SerialPort activePort;
-    volatile static LinkedList<Character> readQueue = new LinkedList<>();
     public static Timer timer;
     private static volatile boolean timerPaused = false;
     private static int prescaler = 0;
@@ -109,28 +110,11 @@ public class Communication {
             timer.cancel();
     }
 
-    public static void registerTimeout() {
-        connected = false;
-        readQueue.addFirst(status);
-        HomeModel.notifyCommTimeout();
-        if (status == 0)
-            processReadQueue();
-    }
-
     public static void onOperationFinished() {
         Communication.status = 0;
         SerialWriter.processWriteQueue();
         if (status == 0)
-            processReadQueue();
-    }
-
-    static void processReadQueue() {
-        if (readQueue.isEmpty())
-            return;
-        Communication.status = readQueue.getFirst();
-        readQueue.remove();
-        SerialReader.initialize();
-        activePort.writeBytes(new byte[]{(byte) Communication.status}, 1);
+            SerialReader.processReadQueue();
     }
 
 }
