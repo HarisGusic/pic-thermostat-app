@@ -26,6 +26,11 @@ public class ProgramsController extends ContentController {
     @FXML
     public void initialize() {
         ProgramsModel.controller = this;
+
+        ProgramsModel.initialize();
+
+        updateUI();
+
         btnRead.setOnAction(e -> {
             ProgramsModel.populate();
         });

@@ -14,12 +14,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static pic.thermostat.comms.Communication.*;
 
 public class SerialReader {
 
     volatile static LinkedList<Character> readQueue = new LinkedList<>();
+
+    static ScheduledExecutorService timeoutListener = Executors.newSingleThreadScheduledExecutor();
 
     private static int programSize = 0;
 
@@ -126,11 +130,11 @@ public class SerialReader {
         status = REQUEST_RX_CURRENT_PROGRAM;
         byte[] isnull = new byte[1];
         activePort.readBytes(isnull, 1);
+        clearBuffer();
         if (isnull[0] == '0') //FIXME
             activePort.writeBytes(new byte[]{REQUEST_RX_CURRENT_PROGRAM}, 1);
         else {
             HomeModel.setCurrentProgram(null);
-            clearBuffer();
             onOperationFinished();
         }
     }
@@ -166,9 +170,15 @@ public class SerialReader {
         status = REQUEST_RX_PROGRAMS;
         byte[] size = new byte[1];
         activePort.readBytes(size, 1);
-        programSize = 0 * (size[0]) + 2; //FIXME Only for debugging purposes
-        // Initiate transmission
-        activePort.writeBytes(new byte[]{REQUEST_RX_PROGRAMS}, 1);
+        programSize = size[0] - 48; //FIXME Only for debugging purposes
+
+        if (programSize != 0) {
+            clearBuffer();
+            // Initiate transmission
+            activePort.writeBytes(new byte[]{REQUEST_RX_PROGRAMS}, 1);
+        } else {
+            onProgramsAvailable();
+        }
     }
 
     private static void onProgramsAvailable() {
@@ -217,16 +227,21 @@ public class SerialReader {
         readQueue.remove();
         SerialReader.initialize();
         activePort.writeBytes(new byte[]{(byte) Communication.status}, 1);
+        /*timeoutListener.schedule(() -> {
+                registerTimeout();
+        }, 3000, TimeUnit.MILLISECONDS); //FIXME on a real system, change to TIMEOUT*/
     }
 
     public static void registerTimeout() {
         connected = false;
+        establishConnection();
         readQueue.addFirst(status);
-        HomeModel.notifyCommTimeout();
+        System.out.println("Read timeout!");
     }
 
     public static void dropAll() {
         activePort.removeDataListener();
+        clearBuffer();
         status = 0;
         readQueue.clear();
     }

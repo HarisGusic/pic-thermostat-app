@@ -30,7 +30,6 @@ public class Controller {
     private HomeController contentHomeController;
     @FXML
     private ProgramsController contentProgramsController;
-
     @FXML
     private SettingsController contentSettingsController;
 

@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import pic.thermostat.comms.Communication;
+import pic.thermostat.comms.SerialReader;
 import pic.thermostat.comms.SerialWriter;
 import pic.thermostat.data.Time;
 
@@ -22,6 +23,7 @@ import java.util.TimerTask;
 
 public class HomeController extends ContentController {
 
+    public static LocalDateTime currentTime = LocalDateTime.of(2020, 2, 3, 0, 0);
     public VBox contentHome;
     public Label labelTime;
     public GridPane temperatureGroup;
@@ -73,8 +75,8 @@ public class HomeController extends ContentController {
         labelDeviceTime.textProperty().bind(HomeModel.displayDeviceTimeProperty());
         fldHomeTemp.textProperty().bind(HomeModel.displayTemperatureProperty());
         btnDownloadTime.setOnAction(e -> {
-            LocalDateTime time = LocalDateTime.now();
-            SerialWriter.sendTime(new Time((byte) ((time.getDayOfWeek().getValue() + 6) % 7), (short) (time.getHour() * 60 + time.getMinute())));
+            SerialWriter.sendTime(new Time((byte) ((currentTime.getDayOfWeek().getValue() + 6) % 7), (short) (currentTime.getHour() * 60 + currentTime.getMinute())));
+            SerialReader.readTime();
         });
 
         // Periodically update the home screen GUI
@@ -90,10 +92,11 @@ public class HomeController extends ContentController {
      * Refresh the system clock
      */
     private void updateClock() {
-        LocalDateTime dateTime = LocalDateTime.now();
-        String hms = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        currentTime = currentTime.plusSeconds(6); // FIXME only when debugging
+        // currentTime = LocalDateTime.now(); // TODO change after debugging
+        String hms = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         labelTime.setText(
-                dateTime.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                currentTime.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
                         + ", "
                         + hms
         );
@@ -118,6 +121,7 @@ public class HomeController extends ContentController {
             Communication.timer = null;
         }
         contentHome.setVisible(active);
+
         if (active)
             timeUpdater.play();
         else
