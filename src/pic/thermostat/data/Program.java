@@ -56,15 +56,16 @@ public class Program implements Serializable {
      * Assign the attributes of this object
      * with the data from {@code rawData}.
      */
-    public void deserialize(byte[] rawData) throws AbsentInformationException {
+    public Program deserialize(byte[] rawData) throws AbsentInformationException {
         if (rawData.length < 10)
             throw new AbsentInformationException("Byte data is incomplete");
         start.day = rawData[0];
-        start.timeOfDay = (short) (rawData[1] + ((short) rawData[2] << 8));
+        start.timeOfDay = (short) (((int) rawData[1] & 0xff) + ((int) rawData[2] << 8));
         end.day = rawData[3];
-        end.timeOfDay = (short) (rawData[4] + ((short) rawData[5] << 8));
-        min = (short) (rawData[6] + ((short) rawData[7] << 8));
-        max = (short) (rawData[8] + ((short) rawData[9] << 8));
+        end.timeOfDay = (short) (((int) rawData[4] & 0xff) + ((int) rawData[5] << 8));
+        min = (short) (((int) rawData[6] & 0xff) + ((int) rawData[7] << 8));
+        max = (short) (((int) rawData[8] & 0xff) + ((int) rawData[9] << 8));
+        return this;
     }
 
     @Override
