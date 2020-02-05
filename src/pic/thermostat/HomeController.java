@@ -54,12 +54,19 @@ public class HomeController extends ContentController {
                 updateTemperatureBar();
         });
         HomeModel.currentProgramProperty().addListener((obs, oldVal, newVal) -> {
-            // Whenever the current program changes, change the content of Min, Max, Start time and End time
-            fldHomeMin.setText(HomeModel.getTextualTemperature(newVal.min));
-            fldHomeMax.setText(HomeModel.getTextualTemperature(newVal.max));
-            updateTemperatureBar();
-            fldTimeOn.setText(new Time(newVal.start.day, newVal.start.timeOfDay).toString());
-            fldTimeOff.setText(new Time(newVal.end.day, newVal.end.timeOfDay).toString());
+            fldHomeMin.setDisable(newVal == null);
+            fldHomeMax.setDisable(newVal == null);
+            fldTimeOn.setDisable(newVal == null);
+            fldTimeOff.setDisable(newVal == null);
+            barTemperature.setDisable(newVal == null);
+            if (newVal != null) {
+                // Whenever the current program changes, change the content of Min, Max, Start time and End time
+                fldHomeMin.setText(HomeModel.getTextualTemperature(newVal.min));
+                fldHomeMax.setText(HomeModel.getTextualTemperature(newVal.max));
+                updateTemperatureBar();
+                fldTimeOn.setText(new Time(newVal.start.day, newVal.start.timeOfDay).toString());
+                fldTimeOff.setText(new Time(newVal.end.day, newVal.end.timeOfDay).toString());
+            }
         });
 
         // Bind controls to their respective model properties

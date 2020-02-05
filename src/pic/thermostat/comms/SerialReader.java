@@ -41,6 +41,9 @@ public class SerialReader {
                     case REQUEST_RX_TIME:
                         onTimeDataAvailable();
                         break;
+                    case REQUEST_RX_ISNULL:
+                        onIsNullAvailable();
+                        break;
                     case REQUEST_RX_CURRENT_PROGRAM:
                         onCurrentProgramDataAvailable();
                         break;
@@ -98,7 +101,6 @@ public class SerialReader {
             registerTimeout();
             return;
         }
-        System.out.println(String.format("%x %x %x", data[0], data[1], data[2])); //TODO remove
         try {
             Time time = new Time();
             time.deserialize(data);
@@ -112,12 +114,25 @@ public class SerialReader {
     }
 
     public static void readCurrentProgram() {
-        if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_CURRENT_PROGRAM)))
-            readQueue.add(Communication.REQUEST_RX_CURRENT_PROGRAM);
+        if (readQueue.stream().noneMatch(c -> c.equals(Communication.REQUEST_RX_ISNULL)))
+            readQueue.add(Communication.REQUEST_RX_ISNULL);
         if (status == 0)
             SerialWriter.processWriteQueue();
         if (status == 0)
             processReadQueue();
+    }
+
+    private static void onIsNullAvailable() {
+        status = REQUEST_RX_CURRENT_PROGRAM;
+        byte[] isnull = new byte[1];
+        activePort.readBytes(isnull, 1);
+        if (isnull[0] == '0') //FIXME
+            activePort.writeBytes(new byte[]{REQUEST_RX_CURRENT_PROGRAM}, 1);
+        else {
+            HomeModel.setCurrentProgram(null);
+            clearBuffer();
+            onOperationFinished();
+        }
     }
 
     private static void onCurrentProgramDataAvailable() {
@@ -208,7 +223,12 @@ public class SerialReader {
         connected = false;
         readQueue.addFirst(status);
         HomeModel.notifyCommTimeout();
-        processReadQueue();
+    }
+
+    public static void dropAll() {
+        activePort.removeDataListener();
+        status = 0;
+        readQueue.clear();
     }
 
 }

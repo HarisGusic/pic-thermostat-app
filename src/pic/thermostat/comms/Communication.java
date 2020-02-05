@@ -16,6 +16,7 @@ public class Communication {
             REQUEST_RX_CURRENT_PROGRAM = '&',
             REQUEST_RX_PROGRAMS = '>',
             REQUEST_RX_N_PROGRAMS = 'N',
+            REQUEST_RX_ISNULL = '?',
             REQUEST_TX_TIME = 't',
             REQUEST_TX_PROGRAM = 'p',
             REQUEST_TX_PROGRAMS = '<',
@@ -100,7 +101,10 @@ public class Communication {
         activePort.writeBytes(new byte[]{REQUEST_CONNECTION}, 1);
         // TODO implement check
         connected = true;
-        Communication.status = 0;
+        status = 0;
+        SerialWriter.processWriteQueue();
+        if (status == 0)
+            SerialReader.processReadQueue();
     }
 
     public static void release() {

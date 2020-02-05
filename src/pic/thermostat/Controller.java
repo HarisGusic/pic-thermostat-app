@@ -5,6 +5,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import pic.thermostat.comms.SerialReader;
 
 import static javafx.scene.input.MouseEvent.MOUSE_PRESSED;
 
@@ -44,6 +45,7 @@ public class Controller {
             ((ToggleButton) button).addEventFilter(MOUSE_PRESSED, e -> {
                 if (button.isSelected())
                     e.consume();
+                SerialReader.dropAll();
             });
 
         btnHome.selectedProperty().addListener((obs, oldVal, newVal) -> {
