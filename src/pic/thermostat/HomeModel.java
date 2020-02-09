@@ -28,7 +28,7 @@ public class HomeModel {
     public static short deserializeTemperature(byte[] data) throws AbsentInformationException {
         if (data.length < 2)
             throw new AbsentInformationException("Temperature data is incomplete");
-        return (short) (data[0] + ((short) data[1] << 8));
+        return (short) (((int) data[0] & 0xff) + (((int) data[1] & 0xff) << 8));
     }
 
     public static String getTextualTemperature(int temp) {

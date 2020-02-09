@@ -9,7 +9,6 @@ import pic.thermostat.data.Time;
 import java.util.LinkedList;
 import java.util.List;
 
-import static pic.thermostat.ProgramsModel.programs;
 import static pic.thermostat.comms.Communication.*;
 
 public class SerialWriter {
@@ -44,15 +43,17 @@ public class SerialWriter {
     }
 
     public static void sendPrograms(List<Program> programs) {
-        if (writeQueue.stream().noneMatch(c -> c.equals(REQUEST_TX_PROGRAMS)))
-            writeQueue.add(REQUEST_TX_PROGRAMS);
+        if (writeQueue.stream().noneMatch(c -> c.equals(REQUEST_TX_N_PROGRAMS)))
+            writeQueue.add(REQUEST_TX_N_PROGRAMS);
         programsToSend = List.copyOf(programs);
         if (status == 0)
             processWriteQueue();
     }
 
     private static void onSendPrograms() {
-        for (var prog : programs)
+        activePort.writeBytes(new byte[]{(byte) programsToSend.size()}, 1);
+        activePort.writeBytes(new byte[]{REQUEST_TX_PROGRAMS}, 1);
+        for (var prog : programsToSend)
             activePort.writeBytes(prog.serialize(), Program.DATA_SIZE);
         onOperationFinished();
     }
@@ -68,7 +69,7 @@ public class SerialWriter {
             case REQUEST_TX_TIME:
                 onSendTime();
                 break;
-            case REQUEST_TX_PROGRAMS:
+            case REQUEST_TX_N_PROGRAMS:
                 onSendPrograms();
                 break;
         }
