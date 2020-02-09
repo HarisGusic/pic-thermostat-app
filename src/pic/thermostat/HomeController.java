@@ -42,9 +42,12 @@ public class HomeController extends ContentController {
 
     @FXML
     public void initialize() {
+        invalidateCurrentProgram();
+
         /*
          * Add listeners to properties
          */
+
         HomeModel.deviceTimeProperty().addListener((obs, oldVal, newVal) -> {
             // Whenever the time changes, change the textual representation as well
             HomeModel.setDisplayDeviceTime(newVal.toString());
@@ -56,19 +59,7 @@ public class HomeController extends ContentController {
                 updateTemperatureBar();
         });
         HomeModel.currentProgramProperty().addListener((obs, oldVal, newVal) -> {
-            fldHomeMin.setDisable(newVal == null);
-            fldHomeMax.setDisable(newVal == null);
-            fldTimeOn.setDisable(newVal == null);
-            fldTimeOff.setDisable(newVal == null);
-            barTemperature.setDisable(newVal == null);
-            if (newVal != null) {
-                // Whenever the current program changes, change the content of Min, Max, Start time and End time
-                fldHomeMin.setText(HomeModel.getTextualTemperature(newVal.min));
-                fldHomeMax.setText(HomeModel.getTextualTemperature(newVal.max));
-                updateTemperatureBar();
-                fldTimeOn.setText(new Time(newVal.start.day, newVal.start.timeOfDay).toString());
-                fldTimeOff.setText(new Time(newVal.end.day, newVal.end.timeOfDay).toString());
-            }
+            invalidateCurrentProgram();
         });
 
         // Bind controls to their respective model properties
@@ -126,5 +117,21 @@ public class HomeController extends ContentController {
             timeUpdater.play();
         else
             timeUpdater.pause();
+    }
+
+    void invalidateCurrentProgram() {
+        fldHomeMin.setDisable(HomeModel.getCurrentProgram() == null);
+        fldHomeMax.setDisable(HomeModel.getCurrentProgram() == null);
+        fldTimeOn.setDisable(HomeModel.getCurrentProgram() == null);
+        fldTimeOff.setDisable(HomeModel.getCurrentProgram() == null);
+        barTemperature.setDisable(HomeModel.getCurrentProgram() == null);
+        if (HomeModel.getCurrentProgram() != null) {
+            // Whenever the current program changes, change the content of Min, Max, Start time and End time
+            fldHomeMin.setText(HomeModel.getTextualTemperature(HomeModel.getCurrentProgram().min));
+            fldHomeMax.setText(HomeModel.getTextualTemperature(HomeModel.getCurrentProgram().max));
+            updateTemperatureBar();
+            fldTimeOn.setText(new Time(HomeModel.getCurrentProgram().start.day, HomeModel.getCurrentProgram().start.timeOfDay).toString());
+            fldTimeOff.setText(new Time(HomeModel.getCurrentProgram().end.day, HomeModel.getCurrentProgram().end.timeOfDay).toString());
+        }
     }
 }
