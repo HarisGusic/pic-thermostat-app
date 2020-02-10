@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="contentSettings" alignment="TOP_CENTER" fillWidth="false" spacing="10"
@@ -10,5 +12,7 @@
         <URL value="@/css/common.css"/>
         <URL value="@/css/content_settings.css"/>
     </stylesheets>
+    <Button fx:id="btnRefresh" mnemonicParsing="false" text="Refresh"/>
 
+    <ListView fx:id="listPorts" prefWidth="200.0"/>
 </VBox>

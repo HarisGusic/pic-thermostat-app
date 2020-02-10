@@ -24,10 +24,8 @@ public class Communication {
 
     public static final int TIMEOUT = 100;
 
-    public static final boolean OPERATION_READ = true, OPERATION_WRITE = false;
     public static volatile boolean connected = false;
     static volatile char status;
-    static volatile boolean operationType = OPERATION_READ;
     static SerialPort activePort;
     public static Timer timer;
     private static volatile boolean timerPaused = false;
@@ -69,12 +67,11 @@ public class Communication {
         List<SerialPort> ports = getUnusedSerialPorts();
         if (ports.isEmpty())
             return;
-        activePort = ports.get(0);
-        activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, TIMEOUT, 0);
-        activePort.openPort();
+        setActivePort(ports.get(0));
+    }
 
-        establishConnection();
+    public static SerialPort getActivePort() {
+        return activePort;
     }
 
     public static void update() {
@@ -121,4 +118,23 @@ public class Communication {
             SerialReader.processReadQueue();
     }
 
+    public static void setActivePort(SerialPort port) {
+        if (activePort != null)
+            activePort.closePort();
+
+        activePort = port;
+
+        if (port == null)
+            return;
+
+        activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, TIMEOUT, 0);
+        activePort.openPort();
+
+        establishConnection();
+    }
+
+    public static boolean isBusy() {
+        return status != 0;
+    }
 }

@@ -1,6 +1,5 @@
 package pic.thermostat;
 
-import com.sun.jdi.AbsentInformationException;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,12 +16,6 @@ public class HomeModel {
     private static SimpleObjectProperty<Program> currentProgram = new SimpleObjectProperty<>();
     private static SimpleObjectProperty<Time> deviceTime = new SimpleObjectProperty<>(new Time((byte) 0, (short) 0));
     private static SimpleStringProperty displayDeviceTime = new SimpleStringProperty(deviceTime.get().toString());
-
-    public static short deserializeTemperature(byte[] data) throws AbsentInformationException {
-        if (data.length < 2)
-            throw new AbsentInformationException("Temperature data is incomplete");
-        return (short) (((int) data[0] & 0xff) + (((int) data[1] & 0xff) << 8));
-    }
 
     // Trivial methods
 

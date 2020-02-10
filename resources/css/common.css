@@ -34,3 +34,19 @@
     -fx-text-fill: -text;
     -fx-alignment: center;
 }
+
+.list-cell {
+    -fx-background-color: -menu;
+}
+
+.list-cell:selected {
+    -fx-background-color: -field;
+}
+
+.list-view {
+    -fx-background-color: -content;
+}
+
+.list-cell:empty {
+    -fx-background-color: -content;
+}
