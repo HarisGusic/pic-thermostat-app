@@ -3,6 +3,7 @@ package pic.thermostat.data;
 import com.sun.jdi.AbsentInformationException;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Holds program data in the same format as the struct Program
@@ -11,10 +12,9 @@ import java.io.Serializable;
  */
 public class Program implements Serializable {
 
+    public static final int DATA_SIZE = 10;
     public Time start = new Time(), end = new Time();
     public short min, max;
-
-    public static final int DATA_SIZE = 10;
 
     public Program() {
 
@@ -22,6 +22,20 @@ public class Program implements Serializable {
 
     public Program(byte[] rawData) throws AbsentInformationException {
         deserialize(rawData);
+    }
+
+    /**
+     * Create a new Program object from the data in {@code rawData}.
+     */
+    public static Program deserialize(byte[] rawData) throws AbsentInformationException {
+        if (rawData.length < DATA_SIZE)
+            throw new AbsentInformationException("Byte data is incomplete");
+        Program program = new Program();
+        program.start = Time.deserialize(Arrays.copyOfRange(rawData, 0, 3));
+        program.end = Time.deserialize(Arrays.copyOfRange(rawData, 3, 6));
+        program.min = Data.deserializeShort(Arrays.copyOfRange(rawData, 6, 8));
+        program.max = Data.deserializeShort(Arrays.copyOfRange(rawData, 8, 10));
+        return program;
     }
 
     public void copy(Program prog) {
@@ -38,34 +52,18 @@ public class Program implements Serializable {
      * for serial transmission.
      */
     public byte[] serialize() {
-        return new byte[]{
-                start.day,
-                (byte) (start.timeOfDay & 0xff),
-                (byte) (start.timeOfDay >> 8),
-                end.day,
-                (byte) (end.timeOfDay & 0xff),
-                (byte) (end.timeOfDay >> 8),
-                (byte) (min & 0xff),
-                (byte) (min >> 8),
-                (byte) (max & 0xff),
-                (byte) (max >> 8),
+        byte[][] data = {
+                start.serialize(),
+                end.serialize(),
+                Data.serializeShort(min),
+                Data.serializeShort(max)
         };
-    }
-
-    /**
-     * Assign the attributes of this object
-     * with the data from {@code rawData}.
-     */
-    public Program deserialize(byte[] rawData) throws AbsentInformationException {
-        if (rawData.length < 10)
-            throw new AbsentInformationException("Byte data is incomplete");
-        start.day = rawData[0];
-        start.timeOfDay = (short) (((int) rawData[1] & 0xff) + ((int) rawData[2] << 8));
-        end.day = rawData[3];
-        end.timeOfDay = (short) (((int) rawData[4] & 0xff) + ((int) rawData[5] << 8));
-        min = (short) (((int) rawData[6] & 0xff) + ((int) rawData[7] << 8));
-        max = (short) (((int) rawData[8] & 0xff) + ((int) rawData[9] << 8));
-        return this;
+        byte[] returnData = new byte[DATA_SIZE];
+        int k = 0;
+        for (int i = 0; i < data.length; ++i)
+            for (int j = 0; j < data[i].length; ++j)
+                returnData[k++] = data[i][j];
+        return returnData;
     }
 
     @Override

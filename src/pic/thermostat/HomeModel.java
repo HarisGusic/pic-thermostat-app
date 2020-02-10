@@ -6,24 +6,17 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
+import pic.thermostat.data.Data;
 import pic.thermostat.data.Program;
 import pic.thermostat.data.Time;
 
-import java.text.DecimalFormat;
-
 public class HomeModel {
 
-    static HomeController controller;
-
-    private static SimpleIntegerProperty temperature = new SimpleIntegerProperty(1024);
-    private static SimpleStringProperty displayTemperature = new SimpleStringProperty(getTextualTemperature(getTemperature()));
+    private static SimpleIntegerProperty temperature = new SimpleIntegerProperty(0);
+    private static SimpleStringProperty displayTemperature = new SimpleStringProperty(Data.getTemperatureText((short) getTemperature()));
     private static SimpleObjectProperty<Program> currentProgram = new SimpleObjectProperty<>();
     private static SimpleObjectProperty<Time> deviceTime = new SimpleObjectProperty<>(new Time((byte) 0, (short) 0));
     private static SimpleStringProperty displayDeviceTime = new SimpleStringProperty(deviceTime.get().toString());
-
-    public static byte[] serializeTemperature() {
-        return new byte[]{(byte) getTemperature(), (byte) (getTemperature() >> 8)};
-    }
 
     public static short deserializeTemperature(byte[] data) throws AbsentInformationException {
         if (data.length < 2)
@@ -31,23 +24,7 @@ public class HomeModel {
         return (short) (((int) data[0] & 0xff) + (((int) data[1] & 0xff) << 8));
     }
 
-    public static String getTextualTemperature(int temp) {
-        return Float.valueOf(new DecimalFormat("#.0").format(getDecimalTemperature(temp))) + " °C";
-    }
-
-    public static float getDecimalTemperature(int temp) {
-        return (float) (5.0 * temp / 1024.0);
-    }
-
-    public static short getRawTemperature(float temp) {
-        return (short) (temp / 5 * 1024);
-    }
-
     // Trivial methods
-
-    public static String getDisplayTemperature() {
-        return displayTemperature.get();
-    }
 
     public static void setDisplayTemperature(String displayTemperature) {
         HomeModel.displayTemperature.set(displayTemperature);
@@ -69,20 +46,12 @@ public class HomeModel {
         return temperature;
     }
 
-    public static Time getDeviceTime() {
-        return deviceTime.get();
-    }
-
     public static void setDeviceTime(Time time) {
         deviceTime.set(time);
     }
 
     public static SimpleObjectProperty<Time> deviceTimeProperty() {
         return deviceTime;
-    }
-
-    public static String getDisplayDeviceTime() {
-        return displayDeviceTime.get();
     }
 
     public static void setDisplayDeviceTime(String strTime) {

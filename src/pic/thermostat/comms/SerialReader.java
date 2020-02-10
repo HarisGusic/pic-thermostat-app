@@ -7,6 +7,7 @@ import com.sun.jdi.AbsentInformationException;
 import javafx.application.Platform;
 import pic.thermostat.HomeModel;
 import pic.thermostat.ProgramsModel;
+import pic.thermostat.data.Data;
 import pic.thermostat.data.Program;
 import pic.thermostat.data.Time;
 
@@ -80,7 +81,7 @@ public class SerialReader {
         System.out.println(String.format("%x %x", data[0], data[1]));
         Platform.runLater(() -> {
             try {
-                HomeModel.setTemperature(HomeModel.deserializeTemperature(data));
+                HomeModel.setTemperature(Data.deserializeShort(data));
             } catch (AbsentInformationException e) {
                 e.printStackTrace();
             }
@@ -106,8 +107,7 @@ public class SerialReader {
             return;
         }
         try {
-            Time time = new Time();
-            time.deserialize(data);
+            Time time = Time.deserialize(data);
             Platform.runLater(() -> HomeModel.setDeviceTime(time));
         } catch (AbsentInformationException e) {
             e.printStackTrace();
@@ -147,7 +147,7 @@ public class SerialReader {
         }
         try {
             Program prog = new Program();
-            prog.deserialize(data);
+            Program.deserialize(data);
             Platform.runLater(() -> HomeModel.setCurrentProgram(prog));
         } catch (AbsentInformationException e) {
             e.printStackTrace();
@@ -191,7 +191,7 @@ public class SerialReader {
         try {
             for (int i = 0; i < programSize; ++i) {
                 Program program = new Program();
-                program.deserialize(Arrays.copyOfRange(data, Program.DATA_SIZE * i, Program.DATA_SIZE * (i + 1)));
+                Program.deserialize(Arrays.copyOfRange(data, Program.DATA_SIZE * i, Program.DATA_SIZE * (i + 1)));
                 programs.add(program);
             }
             ProgramsModel.reloadPrograms(programs);

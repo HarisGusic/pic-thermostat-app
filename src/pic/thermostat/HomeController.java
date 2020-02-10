@@ -12,6 +12,7 @@ import javafx.util.Duration;
 import pic.thermostat.comms.Communication;
 import pic.thermostat.comms.SerialReader;
 import pic.thermostat.comms.SerialWriter;
+import pic.thermostat.data.Data;
 import pic.thermostat.data.Time;
 
 import java.time.LocalDateTime;
@@ -54,7 +55,7 @@ public class HomeController extends ContentController {
         });
         HomeModel.temperatureProperty().addListener((obs, oldVal, newVal) -> {
             // Whenever the temperature changes, change the textual representation as well
-            HomeModel.setDisplayTemperature(HomeModel.getTextualTemperature(HomeModel.getTemperature()));
+            HomeModel.setDisplayTemperature(Data.getTemperatureText());
             if (HomeModel.getCurrentProgram() != null)
                 updateTemperatureBar();
         });
@@ -127,8 +128,8 @@ public class HomeController extends ContentController {
         barTemperature.setDisable(HomeModel.getCurrentProgram() == null);
         if (HomeModel.getCurrentProgram() != null) {
             // Whenever the current program changes, change the content of Min, Max, Start time and End time
-            fldHomeMin.setText(HomeModel.getTextualTemperature(HomeModel.getCurrentProgram().min));
-            fldHomeMax.setText(HomeModel.getTextualTemperature(HomeModel.getCurrentProgram().max));
+            fldHomeMin.setText(Data.getTemperatureText(HomeModel.getCurrentProgram().min));
+            fldHomeMax.setText(Data.getTemperatureText(HomeModel.getCurrentProgram().max));
             updateTemperatureBar();
             fldTimeOn.setText(new Time(HomeModel.getCurrentProgram().start.day, HomeModel.getCurrentProgram().start.timeOfDay).toString());
             fldTimeOff.setText(new Time(HomeModel.getCurrentProgram().end.day, HomeModel.getCurrentProgram().end.timeOfDay).toString());

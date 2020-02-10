@@ -3,8 +3,12 @@ package pic.thermostat.data;
 import com.sun.jdi.AbsentInformationException;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Holds time data in the same format as the struct Time
@@ -28,26 +32,23 @@ public class Time implements Serializable {
     }
 
     /**
-     * Convert this object into byte data suitable
-     * for serial transmission.
+     * Create a new Time object from the data in {@code rawData}.
      */
-    public byte[] serialize() {
-        return new byte[]{
-                day,
-                (byte) (timeOfDay & 0xff),
-                (byte) (timeOfDay >> 8)
-        };
+    public static Time deserialize(byte[] rawData) throws AbsentInformationException {
+        if (rawData.length < DATA_SIZE)
+            throw new AbsentInformationException("Byte data is incomplete");
+        byte day = rawData[0];
+        short timeOfDay = Data.deserializeShort(Arrays.copyOfRange(rawData, 1, 3));
+        return new Time(day, timeOfDay);
     }
 
-    /**
-     * Assign the attributes of this object
-     * with the data from {@code rawData}.
-     */
-    public void deserialize(byte[] rawData) throws AbsentInformationException {
-        if (rawData.length < 3)
-            throw new AbsentInformationException("Byte data is incomplete");
-        day = rawData[0];
-        timeOfDay = (short) (((int) rawData[1] & 0xff) + ((int) rawData[2] << 8));
+    public static Time parseTime(String s) throws ParseException {
+        //TODO deprecated
+        Date date = new SimpleDateFormat("EEE, HH:mm").parse(s);
+        Time time = new Time();
+        time.day = (byte) ((date.getDay() + 6) % 7);
+        time.timeOfDay = (short) (date.getHours() * 60 + date.getMinutes());
+        return time;
     }
 
     /**
@@ -92,5 +93,18 @@ public class Time implements Serializable {
 
     public void setTimeOfDay(short timeOfDay) {
         this.timeOfDay = timeOfDay;
+    }
+
+    /**
+     * Convert this object into byte data suitable
+     * for serial transmission.
+     */
+    public byte[] serialize() {
+        byte[] timeOfDay = Data.serializeShort(this.timeOfDay);
+        return new byte[]{
+                day,
+                timeOfDay[0],
+                timeOfDay[1]
+        };
     }
 }

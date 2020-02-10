@@ -5,7 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
+import pic.thermostat.data.Data;
 import pic.thermostat.data.Program;
+import pic.thermostat.data.Time;
 
 import java.text.ParseException;
 
@@ -57,8 +59,8 @@ public class ProgramItemController {
     private void save() {
         try {
             Program program = new Program();
-            program.start = ProgramItemModel.parseTime(fldStart.getText());
-            program.end = ProgramItemModel.parseTime(fldEnd.getText());
+            program.start = Time.parseTime(fldStart.getText());
+            program.end = Time.parseTime(fldEnd.getText());
             program.min = ProgramItemModel.parseTemperature(fldMin.getText());
             program.max = ProgramItemModel.parseTemperature(fldMax.getText());
             if (!model.getProgram().equals(program))
@@ -75,7 +77,7 @@ public class ProgramItemController {
         fldStart.setText(model.getProgram().start.toString());
         fldEnd.setText(model.getProgram().end.toString());
         title.setText(model.getProgram().start.toString() + " - " + model.getProgram().end.toString());
-        fldMin.setText(HomeModel.getTextualTemperature(model.getProgram().min));
-        fldMax.setText(HomeModel.getTextualTemperature(model.getProgram().max));
+        fldMin.setText(Data.getTemperatureText(model.getProgram().min));
+        fldMax.setText(Data.getTemperatureText(model.getProgram().max));
     }
 }
