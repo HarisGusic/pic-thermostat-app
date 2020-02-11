@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -44,6 +45,10 @@ public class HomeController extends ContentController {
     @FXML
     public void initialize() {
         invalidateCurrentProgram();
+
+        btnDownloadTime.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                e -> btnDownloadTime.getGraphic().setStyle("-fx-fill: -accent;"));
+        btnDownloadTime.addEventHandler(MouseEvent.MOUSE_EXITED, e -> btnDownloadTime.getGraphic().setStyle("-fx-fill: -text;"));
 
         /*
          * Add listeners to properties

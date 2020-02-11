@@ -2,12 +2,10 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
 <?import java.net.URL?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:id="contentHome" alignment="TOP_CENTER"
-      spacing="10" id="home"
-      fx:controller="pic.thermostat.HomeController"
-      fillWidth="false"
-      xmlns="http://javafx.com/javafx">
+<VBox xmlns:fx="http://javafx.com/fxml/1" id="home" fx:id="contentHome" alignment="TOP_CENTER" fillWidth="false"
+      spacing="10" xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="pic.thermostat.HomeController">
 
     <stylesheets>
         <URL value="@/css/common.css"/>
@@ -16,13 +14,20 @@
 
     <!-- Current time -->
     <VBox alignment="CENTER">
-        <Label fx:id="labelTime" styleClass="display-time" text="Sat, 00:00:00"/>
+        <Label fx:id="labelTime" styleClass="display-time" text="Sat, 00:00:00"
+               style="-fx-padding: inherit 20 inherit 20"/>
         <Separator prefWidth="${labelTime.width}"/>
-        <HBox>
-            <Button fx:id="btnDownloadTime" prefWidth="30" prefHeight="30" text="D"/>
-            <Label fx:id="labelDeviceTime" styleClass="display-time" text="Sat, 00:00"
-                   style="-fx-font-size: 16; -fx-opacity: 0.8;"/>
-        </HBox>
+        <AnchorPane>
+            <Button fx:id="btnDownloadTime" layoutY="4.0" prefHeight="20" prefWidth="20"
+                    style="-fx-padding: 0; -fx-max-height: 5" text="">
+                <graphic>
+                    <SVGPath content="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z" id="download"
+                             style="-fx-fill: -text;"/>
+                </graphic>
+            </Button>
+            <Label fx:id="labelDeviceTime" layoutX="22.0" layoutY="1.0" style="-fx-font-size: 16; -fx-opacity: 0.8;"
+                   styleClass="display-time" text="Sat, 00:00"/>
+        </AnchorPane>
     </VBox>
 
     <!-- Temperature group -->
@@ -44,8 +49,7 @@
                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
 
         <ProgressBar fx:id="barTemperature" prefHeight="5" prefWidth="${fldHomeTemp.width}" progress="0.5"
-                     GridPane.columnIndex="1"
-                     GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                     GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
 
         <!-- Min temperature -->
         <Label text="Min" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
@@ -67,7 +71,7 @@
     <VBox alignment="CENTER" fillWidth="false" spacing="5">
         <Label text="Current Program"/>
 
-        <HBox spacing="5" alignment="CENTER">
+        <HBox alignment="CENTER" spacing="5">
             <TextField fx:id="fldTimeOn" editable="false" maxWidth="90" prefColumnCount="${fldTimeOn.length}"
                        text="Sat, 00:00"/>
 

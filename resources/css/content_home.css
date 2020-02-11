@@ -5,6 +5,11 @@
     -fx-padding: 4em 4em 4em 4em;
 }
 
+#download {
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+}
+
 .display-time {
     -fx-font-size: 20;
     -fx-text-fill: -accent;
