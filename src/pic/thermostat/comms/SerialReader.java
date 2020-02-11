@@ -131,7 +131,7 @@ public class SerialReader {
         byte[] isnull = new byte[1];
         activePort.readBytes(isnull, 1);
         clearBuffer();
-        if (isnull[0] == '0') //FIXME
+        if (isnull[0] == 0) //FIXME
             activePort.writeBytes(new byte[]{REQUEST_RX_CURRENT_PROGRAM}, 1);
         else {
             HomeModel.setCurrentProgram(null);

@@ -18,6 +18,7 @@ public class ProgramItemController {
     public TextField fldMin;
     public TextField fldMax;
     public Button btnEdit;
+    public Button btnRemove;
     public AnchorPane content;
     public TitledPane title;
 
@@ -49,6 +50,13 @@ public class ProgramItemController {
                 btnEdit.setText("Edit");
                 save();
             }
+        });
+
+        btnRemove.setOnAction(e -> {
+            int index = ProgramsModel.getPrograms().indexOf(model.getProgram());
+            ProgramsModel.getPrograms().remove(model.getProgram());
+            ProgramsModel.controller.accordion.getPanes().remove(index);
+            ProgramsModel.hasChanged = true;
         });
 
         model.programProperty().addListener((obs, oldVal, newVal) -> {

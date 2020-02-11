@@ -10,7 +10,7 @@ import java.util.Arrays;
  * on the microcontroller. This class implements serialization
  * and deserialization.
  */
-public class Program implements Serializable {
+public class Program implements Serializable, Comparable<Program> {
 
     public static final int DATA_SIZE = 10;
     public Time start = new Time(), end = new Time();
@@ -91,5 +91,10 @@ public class Program implements Serializable {
         prog.min = min;
         prog.max = max;
         return prog;
+    }
+
+    @Override
+    public int compareTo(Program p) {
+        return 2 * start.compareTo(p.start) + end.compareTo(p.end);
     }
 }

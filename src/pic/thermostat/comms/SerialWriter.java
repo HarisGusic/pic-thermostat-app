@@ -52,7 +52,8 @@ public class SerialWriter {
 
     private static void onSendPrograms() {
         activePort.writeBytes(new byte[]{(byte) programsToSend.size()}, 1);
-        activePort.writeBytes(new byte[]{REQUEST_TX_PROGRAMS}, 1);
+        if (!programsToSend.isEmpty())
+            activePort.writeBytes(new byte[]{REQUEST_TX_PROGRAMS}, 1);
         for (var prog : programsToSend)
             activePort.writeBytes(prog.serialize(), Program.DATA_SIZE);
         onOperationFinished();

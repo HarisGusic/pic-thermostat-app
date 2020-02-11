@@ -26,7 +26,26 @@
     -fx-background-color: -content;
 }
 
-/*
-.button {
-    -fx-background-color: -menu;
-}*/
+.scroll-pane {
+    -fx-background: -content;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: -content;
+}
+
+.scroll-bar {
+    -fx-background-color: -content;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -field;
+}
+
+.scroll-bar > .increment-button > .increment-arrow {
+    -fx-background-color: -text;
+}
+
+.scroll-bar > .decrement-button > .decrement-arrow {
+    -fx-background-color: -text;
+}

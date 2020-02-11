@@ -15,7 +15,7 @@ import java.util.Date;
  * on the microcontroller. This class implements serialization
  * and deserialization.
  */
-public class Time implements Serializable {
+public class Time implements Serializable, Comparable<Time> {
 
     public byte day = 0;
     // In this version: the number of minutes that have passed today
@@ -106,5 +106,15 @@ public class Time implements Serializable {
                 timeOfDay[0],
                 timeOfDay[1]
         };
+    }
+
+    @Override
+    public int compareTo(Time t) {
+        if (day < t.day || (day == t.day && timeOfDay < t.timeOfDay))
+            return -1;
+        else if (day == t.day && timeOfDay == t.timeOfDay)
+            return 0;
+        else
+            return 1;
     }
 }

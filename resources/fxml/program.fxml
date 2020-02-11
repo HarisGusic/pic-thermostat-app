@@ -6,17 +6,18 @@
             xmlns="http://javafx.com/javafx/10.0.2-internal">
 
     <AnchorPane fx:id="content" minHeight="0.0" minWidth="0.0" prefWidth="200.0" styleClass="accordion-content">
-        <TextField fx:id="fldStart" text="Mon, 10:00" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="26.0"
-                   prefWidth="76.0"/>
-        <TextField fx:id="fldEnd" text="Wed, 11:00" editable="false" layoutX="111.0" layoutY="14.0" prefHeight="26.0"
-                   prefWidth="76.0"/>
+        <TextField fx:id="fldStart" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="76.0"
+                   text="Mon, 10:00"/>
+        <TextField fx:id="fldEnd" editable="false" layoutX="111.0" layoutY="14.0" prefHeight="26.0" prefWidth="76.0"
+                   text="Wed, 11:00"/>
         <Label layoutX="29.0" layoutY="56.0" text="Min"/>
         <TextField fx:id="fldMin" editable="false" layoutX="96.0" layoutY="52.0" prefHeight="26.0" prefWidth="76.0"
                    text="27 °C"/>
         <Label layoutX="28.0" layoutY="86.0" text="Max"/>
         <TextField fx:id="fldMax" editable="false" layoutX="96.0" layoutY="81.0" prefHeight="26.0" prefWidth="76.0"
                    text="29 °C"/>
-        <Button fx:id="btnEdit" layoutX="82.0" layoutY="113.0" mnemonicParsing="false" text="Edit"/>
+        <Button fx:id="btnEdit" layoutX="52.0" layoutY="113.0" mnemonicParsing="false" text="Edit"/>
+        <Button fx:id="btnRemove" layoutX="100.0" layoutY="113.0" mnemonicParsing="false" text="Remove"/>
     </AnchorPane>
 
 </TitledPane>

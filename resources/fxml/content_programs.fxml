@@ -3,10 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="contentPrograms" alignment="TOP_CENTER" fillWidth="false"
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="contentPrograms" alignment="TOP_CENTER" fillWidth="false" spacing="10"
       style="-fx-background-color: -content; -fx-padding: 4em 4em 4em 4em;"
-      spacing="10" xmlns="http://javafx.com/javafx/10.0.2-internal"
-      fx:controller="pic.thermostat.ProgramsController">
+      xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="pic.thermostat.ProgramsController">
 
     <stylesheets>
         <URL value="@/css/common.css"/>
@@ -19,7 +18,16 @@
         </buttons>
     </ButtonBar>
 
-    <Accordion fx:id="accordion">
 
-    </Accordion>
+    <ScrollPane fx:id="scrollPane" maxHeight="250" prefWidth="210" fitToWidth="true">
+        <Accordion fx:id="accordion" style="-fx-alignment: center">
+
+        </Accordion>
+    </ScrollPane>
+    <ButtonBar prefHeight="40.0">
+        <buttons>
+            <Button fx:id="btnAdd" mnemonicParsing="false" text="Add" ButtonBar.buttonData="LEFT"/>
+            <Button fx:id="btnSort" mnemonicParsing="false" text="Sort" ButtonBar.buttonData="RIGHT"/>
+        </buttons>
+    </ButtonBar>
 </VBox>
