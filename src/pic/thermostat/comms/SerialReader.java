@@ -239,6 +239,8 @@ public class SerialReader {
     }
 
     public static void dropAll() {
+        if (activePort == null)
+            return;
         activePort.removeDataListener();
         clearBuffer();
         status = 0;
