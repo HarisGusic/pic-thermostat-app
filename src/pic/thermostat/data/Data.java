@@ -1,12 +1,11 @@
 package pic.thermostat.data;
 
 import com.sun.jdi.AbsentInformationException;
+import pic.thermostat.HomeModel;
 
 import java.text.DecimalFormat;
 
 public class Data {
-
-    private static short temperature;
 
     public static byte[] serializeShort(short value) {
         return new byte[]{(byte) value, (byte) (value >> 8)};
@@ -19,15 +18,15 @@ public class Data {
     }
 
     public static short getTemperature() {
-        return temperature;
+        return (short) HomeModel.getTemperature();
     }
 
     public static void setTemperature(short rawValue) {
-        temperature = rawValue;
+        HomeModel.setTemperature(rawValue);
     }
 
     public static float getRealTemperature() {
-        return getRealTemperature(temperature);
+        return getRealTemperature((short) HomeModel.getTemperature());
     }
 
     public static void setRealTemperature(float realValue) {
@@ -41,7 +40,7 @@ public class Data {
 
     public static short getRawTemperature(float realValue) {
         // Replace the rule based on the characteristic of the temperature sensor you are using
-        return (short) (temperature / 5.0 * 1024);
+        return (short) (realValue * 1024 / 5.0);
     }
 
     public static String getTemperatureText(float realValue) {

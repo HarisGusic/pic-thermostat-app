@@ -146,8 +146,7 @@ public class SerialReader {
             return;
         }
         try {
-            Program prog = new Program();
-            Program.deserialize(data);
+            Program prog = Program.deserialize(data);
             Platform.runLater(() -> HomeModel.setCurrentProgram(prog));
         } catch (AbsentInformationException e) {
             e.printStackTrace();
@@ -170,7 +169,7 @@ public class SerialReader {
         status = REQUEST_RX_PROGRAMS;
         byte[] size = new byte[1];
         activePort.readBytes(size, 1);
-        programSize = size[0] - 48; //FIXME Only for debugging purposes
+        programSize = size[0]; //FIXME Only for debugging purposes
 
         if (programSize != 0) {
             clearBuffer();
@@ -187,11 +186,11 @@ public class SerialReader {
             registerTimeout();
             return;
         }
+        System.out.println(Arrays.toString(data));
         List<Program> programs = new ArrayList<>(programSize);
         try {
             for (int i = 0; i < programSize; ++i) {
-                Program program = new Program();
-                Program.deserialize(Arrays.copyOfRange(data, Program.DATA_SIZE * i, Program.DATA_SIZE * (i + 1)));
+                Program program = Program.deserialize(Arrays.copyOfRange(data, Program.DATA_SIZE * i, Program.DATA_SIZE * (i + 1)));
                 programs.add(program);
             }
             ProgramsModel.reloadPrograms(programs);

@@ -20,10 +20,6 @@ public class Program implements Serializable, Comparable<Program> {
 
     }
 
-    public Program(byte[] rawData) throws AbsentInformationException {
-        deserialize(rawData);
-    }
-
     /**
      * Create a new Program object from the data in {@code rawData}.
      */

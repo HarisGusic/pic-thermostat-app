@@ -71,8 +71,7 @@ public class ProgramItemController {
             program.end = Time.parseTime(fldEnd.getText());
             program.min = ProgramItemModel.parseTemperature(fldMin.getText());
             program.max = ProgramItemModel.parseTemperature(fldMax.getText());
-            if (!model.getProgram().equals(program))
-                ProgramsModel.hasChanged = true;
+            ProgramsModel.hasChanged = true;
             model.setProgram(program);
             ProgramsModel.getPrograms().set(model.index, program);
         } catch (ParseException e) {

@@ -101,6 +101,8 @@ public class HomeController extends ContentController {
 
     private void updateTemperatureBar() {
         barTemperature.setProgress((float) (HomeModel.getTemperature() - HomeModel.getCurrentProgram().min) / (HomeModel.getCurrentProgram().max - HomeModel.getCurrentProgram().min));
+        if (barTemperature.getProgress() < 0)
+            barTemperature.setProgress(0);
     }
 
     public void setActive(boolean active) {
@@ -125,7 +127,7 @@ public class HomeController extends ContentController {
             timeUpdater.pause();
     }
 
-    void invalidateCurrentProgram() {
+    private void invalidateCurrentProgram() {
         fldHomeMin.setDisable(HomeModel.getCurrentProgram() == null);
         fldHomeMax.setDisable(HomeModel.getCurrentProgram() == null);
         fldTimeOn.setDisable(HomeModel.getCurrentProgram() == null);

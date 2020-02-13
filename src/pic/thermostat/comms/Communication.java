@@ -25,9 +25,9 @@ public class Communication {
     public static final int TIMEOUT = 100;
 
     public static volatile boolean connected = false;
+    public static Timer timer;
     static volatile char status;
     static SerialPort activePort;
-    public static Timer timer;
     private static volatile boolean timerPaused = false;
     private static int prescaler = 0;
 
@@ -74,6 +74,22 @@ public class Communication {
         return activePort;
     }
 
+    public static void setActivePort(SerialPort port) {
+        if (activePort != null)
+            activePort.closePort();
+
+        activePort = port;
+
+        if (port == null)
+            return;
+
+        activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, TIMEOUT, 0);
+        activePort.openPort();
+
+        establishConnection();
+    }
+
     public static void update() {
         if (activePort == null)
             return;
@@ -83,14 +99,13 @@ public class Communication {
         if (!connected)
             establishConnection();
         else {
-            if ((prescaler % 10) == 9)
+            if (prescaler % 5 == 0)
                 SerialReader.readTime();
-            else if ((prescaler % 5) == 4)
+            else if (prescaler % 5 == 2)
                 SerialReader.readCurrentProgram();
-            else
+            else if (prescaler % 5 == 4)
                 SerialReader.readTemperature();
-
-            prescaler %= 10;
+            prescaler %= 5;
         }
     }
 
@@ -116,22 +131,6 @@ public class Communication {
         SerialWriter.processWriteQueue();
         if (status == 0)
             SerialReader.processReadQueue();
-    }
-
-    public static void setActivePort(SerialPort port) {
-        if (activePort != null)
-            activePort.closePort();
-
-        activePort = port;
-
-        if (port == null)
-            return;
-
-        activePort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-        activePort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, TIMEOUT, 0);
-        activePort.openPort();
-
-        establishConnection();
     }
 
     public static boolean isBusy() {
